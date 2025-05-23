@@ -35,7 +35,7 @@
         <div id="dataUser" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Data User:</h6>
-                <a class="collapse-item" href="login.html">User Akreditasi</a>
+                <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}" href="{{ asset('/user') }}">User Akreditasi</a>
                 <a class="collapse-item" href="register.html">Level User Akreditasi</a>
                 <div class="collapse-divider"></div>
             </div>
