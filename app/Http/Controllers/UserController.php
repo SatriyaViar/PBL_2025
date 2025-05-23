@@ -18,7 +18,7 @@ class UserController extends Controller
         ];
 
         $page = (object)[
-            'title' => 'Daftar User yang terdaftar dalam sistem',
+            'title' => 'User Akreditasi Polinema',
         ];
 
         $activeMenu = 'user';

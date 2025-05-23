@@ -36,7 +36,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Data User:</h6>
                 <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}" href="{{ asset('/user') }}">User Akreditasi</a>
-                <a class="collapse-item" href="register.html">Level User Akreditasi</a>
+                <a class="collapse-item {{ $activeMenu == 'level' ? 'active' : '' }}" href="{{ asset('/level') }}">Level User Akreditasi</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>

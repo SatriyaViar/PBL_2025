@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -32,7 +31,9 @@
             @include('layouts.header')
             @include('layouts.breadcrumb')
             <!-- Main Content -->
+
             <div id="content">
+
                 @yield('content')
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -76,6 +77,8 @@
     <script src="{{ asset('/boostraap/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('/boostraap/js/demo/chart-pie-demo.js') }}"></script>
 
+    <!-- 👇 Ini penting! -->
+    @stack('js')
 </body>
 
 </html>
