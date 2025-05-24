@@ -53,30 +53,25 @@
           <li><a href="#about">About</a></li>
           <li><a href="#services">Information</a></li>
           </li>
-          <li class="listing-dropdown"><a href="#"><span>Criteria</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li class="dropdown"><a href="#"><span>Criteria</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li>
-                <a href="#">Criteria 1</a>
-                <a href="#">Criteria 2</a>
-                <a href="#">Criteria 3</a>
-              </li>
-              <li>
-                <a href="#">Criteria 4</a>
-                <a href="#">Criteria 5</a>
-                <a href="#">Criteria 6</a>
-              </li>
-              <li>
-                <a href="#">Criteria 7</a>
-                <a href="#">Criteria 8</a>
-                <a href="#">Criteria 9</a>
-              </li>
+              <li><a href="#">Criteria 1</a></li>
+              <li><a href="#">Criteria 2</a></li>
+              <li><a href="#">Criteria 3</a></li>
+              <li><a href="#">Criteria 4</a></li>
+               <li><a href="#">Criteria 5</a></li>
+                <li><a href="#">Criteria 6</a></li>
+                 <li><a href="#">Criteria 7</a></li>
+                  <li><a href="#">Criteria 8</a></li>
+                   <li><a href="#">Criteria 9</a></li>
             </ul>
           </li>
         </ul>
+
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted flex-md-shrink-0" href="index.html#about">Sign up</a>
+      <a class="btn-getstarted flex-md-shrink-0" href="{{url('login')}}">Sign up</a>
 
     </div>
   </header>
@@ -93,8 +88,11 @@
 D4 Business Information System Study Program</h1>
             <p data-aos="fade-up" data-aos-delay="100">Website to help simplify the Accreditation System, especially in the Business Information Systems Study Program, Department of Information Technology, State Polytechnic of Malang. </p>
             <div class="d-flex flex-column flex-md-row" data-aos="fade-up" data-aos-delay="200">
-              <a href="#about" class="btn-get-started">Sign up<i class="bi bi-arrow-right"></i></a>
-              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center justify-content-center ms-0 ms-md-4 mt-4 mt-md-0"><i></i><span>Sign in</span></a>
+              <a href="login" class="btn-get-started">Sign up<i class="bi bi-arrow-right"></i></a>
+             <a href="{{ url('/login') }}" class="glightbox btn-watch-video d-flex align-items-center justify-content-center ms-0 ms-md-4 mt-4 mt-md-0">
+  <i></i><span>Sign in</span>
+</a>
+
             </div>
           </div>
           <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out">
