@@ -50,12 +50,12 @@ class LevelController extends Controller
             ->make(true);
     }
 
-    public function create()
+    public function create_ajax()
     {
-        return view('level.create');
+        return view('level.create_ajax');
     }
 
-    public function store(Request $request)
+    public function store_ajax(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
@@ -132,36 +132,36 @@ class LevelController extends Controller
         redirect('/');
     }
 
-    public function confirm_ajax(string $id)
-    {
-        $level = LevelModel::find($id);
-        return view('level.confirm_ajax', ['level' => $level]);
-    }
+     public function confirm_ajax(string $id)
+   {
+      $level = LevelModel::find($id);
+      return view('level.confirm_ajax', ['level' => $level]);
+   }
 
-    public function delete_ajax(Request $request, $id)
-    {
-        if ($request->ajax() || $request->wantsJson()) {
-            $level = LevelModel::find($id);
-            if ($level) {
-                try {
-                    LevelModel::destroy($id);
-                    return response()->json([
-                        'status'  => true,
-                        'message' => 'Data berhasil dihapus'
-                    ]);
-                } catch (\Illuminate\Database\QueryException $e) {
-                    return response()->json([
-                        'status'  => false,
-                        'message' => 'Data level gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
-                    ]);
-                }
-            } else {
-                return response()->json([
-                    'status'  => false,
-                    'message' => 'Data tidak ditemukan'
-                ]);
+   public function delete_ajax(Request $request, $id)
+   {
+      if ($request->ajax() || $request->wantsJson()) {
+         $level = LevelModel::find($id);
+         if ($level) {
+            try {
+               LevelModel::destroy($id);
+               return response()->json([
+                  'status'  => true,
+                  'message' => 'Data berhasil dihapus'
+               ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+               return response()->json([
+                  'status'  => false,
+                  'message' => 'Data level gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
+               ]);
             }
-        }
-        redirect('/');
-    }
+         } else {
+            return response()->json([
+               'status'  => false,
+               'message' => 'Data tidak ditemukan'
+            ]);
+         }
+      }
+      redirect('/');
+   }
 }
