@@ -62,6 +62,7 @@ class LevelController extends Controller
                 'level_kode' => 'required|string|min:3|unique:m_level,level_kode',
                 'level_nama' => 'required|string|max:100'
             ];
+
             $validator = Validator::make($request->all(), $rules);
 
             if ($validator->fails()) {
@@ -69,7 +70,7 @@ class LevelController extends Controller
                     'status' => false,
                     'message' => 'Validasi Gagal',
                     'msgField' => $validator->errors()
-                ]);
+                ], 422);
             }
 
             LevelModel::create($request->all());
@@ -78,7 +79,11 @@ class LevelController extends Controller
                 'message' => 'Data level berhasil disimpan'
             ]);
         }
-        redirect('/');
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Not valid ajax / json'
+        ], 500);
     }
 
     public function show_ajax(string $id)

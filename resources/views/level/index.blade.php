@@ -16,6 +16,7 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('erorr') }}</div>
             @endif
+
             <table class="table table-bordered table-striped table-hover table-sm dt-responsive nowrap" id="table_level"
                 style="width: 100%;">
 
@@ -36,6 +37,7 @@
 
 
 @push('css')
+
 @endpush
 
 

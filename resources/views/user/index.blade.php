@@ -33,7 +33,8 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+            <table class="table table-bordered table-striped table-hover table-sm dt-responsive nowrap" id="table_user"
+                style="width: 100%;">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -60,16 +61,16 @@
                 $('#myModal').modal('show');
             });
         }
-
         var dataUser;
         $(document).ready(function() {
             dataUser = $('#table_user').DataTable({
+                responsive: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('user/list') }}",
-                    dataType: "json",
-                    type: "POST",
-                    data: function(d) {
+                    "url": "{{ url('user/list') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data": function(d) {
                         d.level_id = $('#level_id').val();
                     }
                 },
