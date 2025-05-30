@@ -58,7 +58,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Kriteria Akreditasi:</h6>
                 <a class="collapse-item {{ $activeMenu == 'kriteria' ? 'active' : '' }}"
-                    href="{{ asset('/kriteria') }}">Kriteria 1</a>
+                    href="{{ asset('/kriteria') }}">Kriteria Akreditasi</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>

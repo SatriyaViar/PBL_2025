@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\KriteriaModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,17 +18,18 @@ class KriteriaController extends Controller
         ];
 
         $page = (object)[
-            'title' => 'Kriteria Akreditasi - '
+            'title' => 'Kriteria Akreditasi'
         ];
 
         $activeMenu = 'kriteria';
+        $kriterias = KriteriaModel::all();
         $user = UserModel::all();
 
         return view('kriteria.index', [
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'activeMenu' => $activeMenu,
-            'user'   => $user
+            'user'   => $user,
         ]);
     }
 
@@ -92,5 +92,91 @@ class KriteriaController extends Controller
     {
         $kriteria = KriteriaModel::find($id);
         return view('kriteria.edit_ajax', ['kriteria' => $kriteria]);
+    }
+
+    public function update_ajax(Request $request, $id)
+    {
+        // Cek apakah request berasal dari AJAX
+        if ($request->ajax()) {
+            // Validasi input
+            $rules = [
+                'kriteria_nama' => 'required|string|max:100',
+                'kriteria_link' => 'required|string|max:100',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'    => false,
+                    'message'   => 'Validasi gagal.',
+                    'msgField'  => $validator->errors()
+                ]);
+            }
+
+            // Cek apakah user ditemukan
+            $kriteria = KriteriaModel::find($id);
+            if ($kriteria) {
+
+                // Update data kriter$kriteria
+                $kriteria->update([
+                    'user_id' => 2, // sementara isi manual (atau ganti sesuai user aktif)
+                    'kriteria_nama' => $request->kriteria_nama,
+                    'kriteria_link' => $request->kriteria_link,
+                ]);
+
+                return response()->json([
+                    'status'    => true,
+                    'message'   => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status'    => false,
+                    'message'   => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+
+        // Jika bukan request AJAX
+        return redirect('/kriteria');
+    }
+
+    public function show_ajax(String $id)
+    {
+        $kriteria = KriteriaModel::find($id);
+
+        return view('kriteria.show_ajax', compact('kriteria'));
+    }
+
+     public function confirm_ajax(string $id)
+    {
+        $kriteria = KriteriaModel::find($id);
+        return view('kriteria.confirm_ajax', ['kriteria' => $kriteria]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $kriteria = KriteriaModel::find($id);
+            if ($kriteria) {
+                try {
+                    KriteriaModel::destroy($id);
+                    return response()->json([
+                        'status'  => true,
+                        'message' => 'Data berhasil dihapus'
+                    ]);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    return response()->json([
+                        'status'  => false,
+                        'message' => 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        redirect('/');
     }
 }
