@@ -3,10 +3,11 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h4 class="card-title bold">{{ $page->title }}</h4>
+            <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
                 <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    User</button>
+                    Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -33,8 +34,7 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-striped table-hover table-sm dt-responsive nowrap" id="table_user"
-                style="width: 100%;">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -61,16 +61,16 @@
                 $('#myModal').modal('show');
             });
         }
+
         var dataUser;
         $(document).ready(function() {
             dataUser = $('#table_user').DataTable({
-                responsive: true,
                 serverSide: true,
                 ajax: {
-                    "url": "{{ url('user/list') }}",
-                    "dataType": "json",
-                    "type": "POST",
-                    "data": function(d) {
+                    url: "{{ url('user/list') }}",
+                    dataType: "json",
+                    type: "POST",
+                    data: function(d) {
                         d.level_id = $('#level_id').val();
                     }
                 },
