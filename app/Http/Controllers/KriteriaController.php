@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LevelModel;
+use App\Models\KriteriaModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
-class UserController extends Controller
+class KriteriaController extends Controller
 {
-    function index()
+    public function index()
     {
         $breadcrumb = (object)[
-            'title' => 'Daftar User',
-            'list'  => ['Home', 'User']
+            'title' => 'Kriteria Akreditasi',
+            'list'  => ['Home', 'Kriteria']
         ];
 
         $page = (object)[
-            'title' => 'User Akreditasi Polinema',
+            'title' => 'Kriteria Akreditasi'
         ];
 
-        $activeMenu = 'user';
+        $activeMenu = 'kriteria';
+        $kriterias = KriteriaModel::all();
+        $user = UserModel::all();
 
-        $level = LevelModel::all();
-
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu, 'level' => $level]);
+        return view('kriteria.index', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'activeMenu' => $activeMenu,
+            'user'   => $user,
+        ]);
     }
 
-    public function list(Request $request)
+    public function list()
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id', 'image')
-            ->with('level');
+        $kriteria = KriteriaModel::select('kriteria_id', 'kriteria_nama', 'kriteria_link');
 
-        if ($request->level_id) {
-            $users->where('level_id', $request->level_id);
-        }
-
-        return DataTables::of($users)
+        return DataTables::of($kriteria)
             // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex)
             ->addIndexColumn()
-            ->addColumn('action', function ($user) { // menambahkan kolom action
+            ->addColumn('action', function ($kriteria) { // menambahkan kolom action
                 //AJAX
-                $btn = '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/user/' . $user->user_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
+                $btn = '<button onclick="modalAction(\'' . url('/kriteria/' . $kriteria->kriteria_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/kriteria/' . $kriteria->kriteria_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/kriteria/' . $kriteria->kriteria_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['action']) // memberitahu bahwa kolom action adalah html
@@ -53,17 +53,7 @@ class UserController extends Controller
 
     function create_ajax()
     {
-        $level = LevelModel::select('level_id', 'level_nama')->get();
-
-        return view('user.create_ajax')->with('level', $level);
-    }
-
-    public function show_ajax(String $id)
-    {
-        $user = UserModel::find($id);
-        $level = LevelModel::select('level_id', 'level_nama')->get();
-
-        return view('user.show_ajax', compact('user', 'level'));
+        return view('kriteria.create_ajax');
     }
 
     public function store_ajax(Request $request)
@@ -71,11 +61,8 @@ class UserController extends Controller
         // cek apakah request berupa ajax
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_id' => 'required|integer',
-                'username' => 'required|string|min:3|unique:m_user,username',
-                'nama' => 'required|string|max:100',
-                'password' => 'required|min:6',
-                'image'    => 'nullable|string|max:255',
+                'kriteria_nama' => 'required|string|max:100',
+                'kriteria_link' => 'required|string|max:100',
             ];
             // use Illuminate\Support\Facades\Validator;
             $validator = Validator::make($request->all(), $rules);
@@ -88,22 +75,24 @@ class UserController extends Controller
                 ]);
             }
 
-            UserModel::create($request->all());
+            KriteriaModel::create([
+                'user_id' => 2, // sementara isi manual (atau ganti sesuai user aktif)
+                'kriteria_nama' => $request->kriteria_nama,
+                'kriteria_link' => $request->kriteria_link,
+            ]);
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan'
+                'message' => 'Data Kriteria berhasil disimpan'
             ]);
         }
         redirect('/');
     }
 
     function edit_ajax(string $id)
-   {
-      $user = UserModel::find($id);
-      $level = LevelModel::select('level_id', 'level_nama')->get();
-
-      return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
-   }
+    {
+        $kriteria = KriteriaModel::find($id);
+        return view('kriteria.edit_ajax', ['kriteria' => $kriteria]);
+    }
 
     public function update_ajax(Request $request, $id)
     {
@@ -111,11 +100,8 @@ class UserController extends Controller
         if ($request->ajax()) {
             // Validasi input
             $rules = [
-                'level_id' => 'required|integer',
-                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
-                'nama'     => 'required|max:100',
-                'password' => 'nullable|min:6|max:20',
-                'image'    => 'nullable|string|max:255'
+                'kriteria_nama' => 'required|string|max:100',
+                'kriteria_link' => 'required|string|max:100',
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -128,14 +114,15 @@ class UserController extends Controller
             }
 
             // Cek apakah user ditemukan
-            $user = UserModel::find($id);
-            if ($user) {
-                // Jika password kosong, jangan update password
-                if (!$request->filled('password')) {
-                    $request->request->remove('password');
-                }
-                // Update data user
-                $user->update($request->all());
+            $kriteria = KriteriaModel::find($id);
+            if ($kriteria) {
+
+                // Update data kriter$kriteria
+                $kriteria->update([
+                    'user_id' => 2, // sementara isi manual (atau ganti sesuai user aktif)
+                    'kriteria_nama' => $request->kriteria_nama,
+                    'kriteria_link' => $request->kriteria_link,
+                ]);
 
                 return response()->json([
                     'status'    => true,
@@ -150,21 +137,29 @@ class UserController extends Controller
         }
 
         // Jika bukan request AJAX
-        return redirect('/user');
+        return redirect('/kriteria');
     }
-    public function confirm_ajax(string $id)
+
+    public function show_ajax(String $id)
     {
-        $user = UserModel::find($id);
-        return view('user.confirm_ajax', ['user' => $user]);
+        $kriteria = KriteriaModel::find($id);
+
+        return view('kriteria.show_ajax', compact('kriteria'));
+    }
+
+     public function confirm_ajax(string $id)
+    {
+        $kriteria = KriteriaModel::find($id);
+        return view('kriteria.confirm_ajax', ['kriteria' => $kriteria]);
     }
 
     public function delete_ajax(Request $request, $id)
     {
         if ($request->ajax() || $request->wantsJson()) {
-            $user = UserModel::find($id);
-            if ($user) {
+            $kriteria = KriteriaModel::find($id);
+            if ($kriteria) {
                 try {
-                    UserModel::destroy($id);
+                    KriteriaModel::destroy($id);
                     return response()->json([
                         'status'  => true,
                         'message' => 'Data berhasil dihapus'
