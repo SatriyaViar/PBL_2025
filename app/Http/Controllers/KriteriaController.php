@@ -22,7 +22,7 @@ class KriteriaController extends Controller
         ];
 
         $activeMenu = 'kriteria';
-        $kriterias = KriteriaModel::all();
+        $kriteria = KriteriaModel::all();
         $user = UserModel::all();
 
         return view('kriteria.index', [
@@ -30,8 +30,17 @@ class KriteriaController extends Controller
             'page' => $page,
             'activeMenu' => $activeMenu,
             'user'   => $user,
+
         ]);
     }
+
+    public function getSidebarKriteria()
+    {
+        $kriteria = KriteriaModel::all(['kriteria_id', 'kriteria_nama']);
+
+        return response()->json($kriteria);
+    }
+
 
     public function list()
     {
@@ -147,7 +156,7 @@ class KriteriaController extends Controller
         return view('kriteria.show_ajax', compact('kriteria'));
     }
 
-     public function confirm_ajax(string $id)
+    public function confirm_ajax(string $id)
     {
         $kriteria = KriteriaModel::find($id);
         return view('kriteria.confirm_ajax', ['kriteria' => $kriteria]);

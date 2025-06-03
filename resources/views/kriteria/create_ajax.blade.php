@@ -69,6 +69,7 @@
                                 text: response.message
                             });
                             dataKriteria.ajax.reload();
+                            loadSidebarKriteria();
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
