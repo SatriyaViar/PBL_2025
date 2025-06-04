@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('user_id');
             $table->string('username', 10)->unique();
             $table->string('email')->unique();
-            $table->string('nidn', 10)->unique();
+            $table->string('nidn', 10)->nullable();
             $table->string('name');
             $table->string('password');
             $table->unsignedBigInteger('level_id')->index();

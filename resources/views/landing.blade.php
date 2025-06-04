@@ -51,7 +51,7 @@
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
-           <a href="{{ route('kriteria.index') }}"><span>Criteria</span></a>
+           {{-- <a href="{{ route('kriteria.index') }}"><span>Criteria</span></a> --}}
         <li class="dropdown"><a href="#"><span>Building Plan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="{{ url('/denah/lantai5') }}">5th floor</a></li>
