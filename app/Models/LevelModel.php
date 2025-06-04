@@ -13,7 +13,10 @@ class LevelModel extends Model
     protected $primaryKey = "level_id";
 
    //untuk mengizinkan mass assignment
-    protected $fillable = ['level_kode', 'level_nama'];
+    protected $fillable = [
+        'level_kode', 
+        'level_nama',
+    ];
 
     function  users() : HasMany {
         return $this->hasMany(User::class);

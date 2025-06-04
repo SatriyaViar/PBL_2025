@@ -22,8 +22,8 @@ class ViewServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Bagikan data ke sidebar view
-        View::composer('layouts.sidebar', function ($view) {
-            $view->with('kriterias', KriteriaModel::all());
-        });
+        // View::composer('layouts.sidebar', function ($view) {
+        //     $view->with('kriterias', KriteriaModel::all());
+        // });
     }
 }

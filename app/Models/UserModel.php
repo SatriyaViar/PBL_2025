@@ -14,7 +14,14 @@ class UserModel extends Authenticatable
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
 
-    protected $fillable = ['level_id', 'username', 'nama', 'password', 'image', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'username', 
+        'email',
+        'nidn',
+        'nama', 
+        'password', 
+        'level_id',
+        ];
 
     protected $hidden = ['password'];
 
@@ -23,12 +30,5 @@ class UserModel extends Authenticatable
     public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
-    }
-
-    protected function image()
-    {
-        return Attribute::make(
-            get: fn($image) => url('/storage/posts/' . $image),
-        );
     }
 }

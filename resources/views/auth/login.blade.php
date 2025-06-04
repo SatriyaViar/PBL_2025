@@ -8,173 +8,269 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>{{ config('app.name', 'Accreditation System') }} - Login</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{ asset('/boostraap/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="{{ asset('/boostraap/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1rem;
+        }
+        
+        .login-title {
+            color: #5a67d8;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: #5a67d8;
+            box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.1);
+        }
+        
+        .form-control::placeholder {
+            color: #a0aec0;
+            font-weight: 500;
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, #5a67d8, #667eea);
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-login:hover {
+            background: linear-gradient(135deg, #4c51bf, #5a67d8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(90, 103, 216, 0.3);
+            color: white;
+        }
+        
+        .btn-home {
+            background: transparent;
+            border: 2px solid #a0aec0;
+            border-radius: 12px;
+            padding: 0.7rem 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #718096;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-home:hover {
+            background: #f7fafc;
+            border-color: #718096;
+            color: #4a5568;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            color: #a0aec0;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #fed7d7, #feb2b2);
+            color: #c53030;
+        }
+        
+        .alert-success {
+            background: linear-gradient(135deg, #c6f6d5, #9ae6b4);
+            color: #2d7738;
+        }
+        
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-primary">
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="{{ asset('img/polinema-logo.png') }}" alt="Polinema Logo">
+            </div>
+            
+            <!-- Title -->
+            <h2 class="login-title">Accreditation</h2>
+            
+            <!-- Alert Messages -->
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-    <div class="container">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
-
-            <div class="col-xl-10 col-lg-12 col-md-9">
-
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome To Akreditasi Polinema</h1>
-                                    </div>
-                                    <form action="{{ url('login') }}" method="POST" id="form-login">
-                                        @csrf
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="username" name="username" class="form-control"
-                                                placeholder="Username">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-user"></span>
-                                                </div>
-                                            </div>
-                                            <small id="error-username" class="error-text text-danger"></small>
-                                        </div>
-                                        <div class="input-group mb-3">
-                                            <input type="password" id="password" name="password" class="form-control"
-                                                placeholder="Password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-lock"></span>
-                                                </div>
-                                            </div>
-                                            <small id="error-password" class="error-text text-danger"></small>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-16">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                                        </div>
-                                        <hr>
-                                    </form>
-                                    <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
-                                </div>
-                            </div>
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
+            <!-- Login Form -->
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                
+                <!-- Username Field -->
+                <div class="form-group">
+                    <input type="text" 
+                           class="form-control @error('username') is-invalid @enderror" 
+                           id="username" 
+                           name="username" 
+                           placeholder="Username" 
+                           value="{{ old('username') }}" 
+                           required 
+                           autofocus>
+                    @error('username')
+                        <div class="invalid-feedback">
+                            {{ $message }}
                         </div>
+                    @enderror
+                </div>
+                
+                <!-- Password Field -->
+                <div class="form-group">
+                    <input type="password" 
+                           class="form-control @error('password') is-invalid @enderror" 
+                           id="password" 
+                           name="password" 
+                           placeholder="Password" 
+                           required>
+                    @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                
+                <!-- Remember Me -->
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" class="custom-control-input" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="remember">Remember Me</label>
                     </div>
                 </div>
-
+                
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <!-- Back to Home Button -->
+            <a href="{{ url('/') }}" class="btn-home">
+                <i class="fas fa-home"></i> Back to Home Page
+            </a>
+            
+            <!-- Copyright -->
+            <div class="copyright">
+                © Polinema Student {{ date('Y') }}
             </div>
-
         </div>
-
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('boostraap/vendor/jquery/jquery.min.js') }}"></script>
-    <!-- jQuery Wajib duluan -->
-    <script src="{{ asset('/boostraap/vendor/jquery/jquery.min.js') }}"></script>
-
-    <!-- Plugin tambahan -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="{{ asset('boostraap/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-
-
+    <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{ asset('boostraap/js/sb-admin-2.min.js') }}"></script>
-
-
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $(document).ready(function() {
-            $("#form-login").validate({
-                rules: {
-                    username: {
-                        required: true,
-                        minlength: 4,
-                        maxlength: 20
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 20
-                    }
-                },
-                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
-                    $.ajax({
-                        url: form.action,
-                        type: form.method,
-                        data: $(form).serialize(),
-                        success: function(response) {
-                            if (response.status) { // jika sukses
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: response.message,
-                                }).then(function() {
-                                    window.location = response.redirect;
-                                });
-                            } else { // jika error
-                                $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Terjadi Kesalahan',
-                                    text: response.message
-                                });
-                            }
-                        }
-                    });
-                    return false;
-                },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.input-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 </body>
 
 </html>

@@ -23,11 +23,7 @@ Route::get('/', [DashboardController::class, 'index']);
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
-Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
-
-Route::get('/sidebar/kriteria-ppep', function () {
-    return \App\Models\KriteriaModel::select('kriteria_id', 'kriteria_nama')->get();
-});
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth'])->group(function () {
@@ -66,23 +62,5 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
         Route::delete('/{id}', [LevelController::class, 'destroy']);
-    });
-
-    Route::group(['prefix' => 'kriteria'], function () {
-        Route::get('/', [KriteriaController::class, 'index']);
-        Route::post('/list', [KriteriaController::class, 'list']);
-        Route::get('/create', [KriteriaController::class, 'create']);
-        Route::post('/', [KriteriaController::class, 'store']);
-        Route::get('/create_ajax', [KriteriaController::class, 'create_ajax']); // Menampilkan halaman form tambah user Ajax
-        Route::post('/ajax', [KriteriaController::class, 'store_ajax']);    // Menyimpan data user baru Ajax
-        Route::get('/{id}', [KriteriaController::class, 'show']);
-        Route::get('/{id}/edit', [KriteriaController::class, 'edit']);
-        Route::put('/{id}', [KriteriaController::class, 'update']);
-        Route::get('/{id}/edit_ajax', [KriteriaController::class, 'edit_ajax']); //Menampilkan Halaman form Edit User AJAX
-        Route::put('/{id}/update_ajax', [KriteriaController::class, 'update_ajax']); //Menyimpan perubahan data User AJAX
-        Route::get('/{id}/delete_ajax', [KriteriaController::class, 'confirm_ajax']);
-        Route::get('/{id}/show_ajax', [KriteriaController::class, 'show_ajax']);
-        Route::delete('/{id}/delete_ajax', [KriteriaController::class, 'delete_ajax']);
-        Route::delete('/{id}', [KriteriaController::class, 'destroy']);
     });
 });
