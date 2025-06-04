@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+     <link href="assets/img/LogoJTI.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     <meta charset="UTF-8">
     <title>Login - Accreditation System</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -23,11 +26,6 @@
 
                 <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Sign In</button>
             </form>
-
-            <p class="mt-4 text-center text-sm text-gray-600">
-                Don't have an account?
-                <a href="/register" class="text-blue-600 hover:underline">Sign up</a>
-            </p>
         </div>
     </div>
 </body>

@@ -51,27 +51,22 @@
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#services">Information</a></li>
-          </li>
-          <li class="dropdown"><a href="#"><span>Criteria</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+           <a href="{{ route('kriteria.index') }}"><span>Criteria</span></a>
+        <li class="dropdown"><a href="#"><span>Building Plan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="#">Criteria 1</a></li>
-              <li><a href="#">Criteria 2</a></li>
-              <li><a href="#">Criteria 3</a></li>
-              <li><a href="#">Criteria 4</a></li>
-               <li><a href="#">Criteria 5</a></li>
-                <li><a href="#">Criteria 6</a></li>
-                 <li><a href="#">Criteria 7</a></li>
-                  <li><a href="#">Criteria 8</a></li>
-                   <li><a href="#">Criteria 9</a></li>
-            </ul>
+              <li><a href="{{ url('/denah/lantai5') }}">5th floor</a></li>
+<li><a href="{{ url('/denah/lantai6') }}">6th floor</a></li>
+<li><a href="{{ url('/denah/lantai7') }}">7th floor</a></li>
           </li>
+         <li class="sitename">
+</li>
+
         </ul>
 
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted flex-md-shrink-0" href="{{url('login')}}">Sign up</a>
+      <a class="btn-getstarted flex-md-shrink-0" href="{{url('login')}}">Sign in</a>
 
     </div>
   </header>
@@ -88,9 +83,8 @@
 D4 Business Information System Study Program</h1>
             <p data-aos="fade-up" data-aos-delay="100">Website to help simplify the Accreditation System, especially in the Business Information Systems Study Program, Department of Information Technology, State Polytechnic of Malang. </p>
             <div class="d-flex flex-column flex-md-row" data-aos="fade-up" data-aos-delay="200">
-              <a href="login" class="btn-get-started">Sign up<i class="bi bi-arrow-right"></i></a>
+              <a href="login" class="btn-get-started">Sign in<i class="bi bi-arrow-right"></i></a>
              <a href="{{ url('/login') }}" class="glightbox btn-watch-video d-flex align-items-center justify-content-center ms-0 ms-md-4 mt-4 mt-md-0">
-  <i></i><span>Sign in</span>
 </a>
 
             </div>

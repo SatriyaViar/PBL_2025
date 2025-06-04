@@ -3,8 +3,8 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-/*
+use App\Http\Controllers\KriteriaController;
+/*use App
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -24,7 +24,9 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/Dasboard', [DashboardController::class, 'index']);
+Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
+
+Route::get('/dashboard', [DashboardController::class, 'index']);
 
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);
@@ -43,3 +45,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
+
+Route::view('/denah/lantai5', 'denah.lantai5');
+Route::view('/denah/lantai6', 'denah.lantai6');
+Route::view('/denah/lantai7', 'denah.lantai7');
