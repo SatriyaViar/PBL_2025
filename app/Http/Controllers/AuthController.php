@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function viewLogin()
     {
         if (Auth::check()) { // jika sudah login, maka redirect ke halaman home return redirect('/');
+            return redirect('/');
         }
 
         return view('auth.login');
     }
 
-    public function postlogin(Request $request)
+    public function login(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
             $credentials = $request->only('username', 'password');

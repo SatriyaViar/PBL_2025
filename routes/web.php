@@ -22,12 +22,12 @@ Route::get('/', function () {
 });
 
 
-Route::pattern('id', '[0-9]+');
-Route::get('/', [DashboardController::class, 'index']);
+// Route::pattern('id', '[0-9]+');
+// Route::get('/dasboard', [DashboardController::class, 'index']);
 
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin']);
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'viewLogin'])->name('login.view');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::middleware(['auth'])->group(function () {
