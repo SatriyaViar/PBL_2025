@@ -5601,13 +5601,17 @@
         {
             "name": "yajra/laravel-datatables-oracle",
             "version": "v10.11.4",
+            "version": "v10.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
                 "reference": "a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5"
+                "reference": "a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5"
             },
             "dist": {
                 "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5",
+                "reference": "a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5",
                 "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5",
                 "reference": "a11dc9cf5ec7f7dc68ad0d5959c5e7aec0af29a5",
                 "shasum": ""
@@ -5621,6 +5625,10 @@
                 "php": "^8.0.2"
             },
             "require-dev": {
+                "algolia/algoliasearch-client-php": "^3.4",
+                "larastan/larastan": "^2.4",
+                "laravel/scout": "^10.5",
+                "meilisearch/meilisearch-php": "^1.4",
                 "algolia/algoliasearch-client-php": "^3.4",
                 "larastan/larastan": "^2.4",
                 "laravel/scout": "^10.5",
@@ -5676,6 +5684,7 @@
             "support": {
                 "issues": "https://github.com/yajra/laravel-datatables/issues",
                 "source": "https://github.com/yajra/laravel-datatables/tree/v10.11.4"
+                "source": "https://github.com/yajra/laravel-datatables/tree/v10.11.4"
             },
             "funding": [
                 {
@@ -5683,6 +5692,7 @@
                     "type": "github"
                 }
             ],
+            "time": "2024-02-28T05:00:23+00:00"
             "time": "2024-02-28T05:00:23+00:00"
         }
     ],
