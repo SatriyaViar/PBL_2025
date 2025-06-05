@@ -16,13 +16,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    return view('landing');
-});
-
 
 // Route::pattern('id', '[0-9]+');
-// Route::get('/dasboard', [DashboardController::class, 'index']);
+Route::get('/', function () {return view('landing');});
+Route::get('/dasboard', [DashboardController::class, 'index']);
 
 Route::get('/login', [AuthController::class, 'viewLogin'])->name('login.view');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('m_user', function (Blueprint $table) {
             $table->id('user_id');
-            $table->string('username', 10)->unique();
+            $table->unsignedBigInteger('level_id')->index();
+            $table->string('username', 100)->unique();
+            $table->string('nidn', 100)->nullable();
             $table->string('email')->unique();
-            $table->string('nidn', 10)->nullable();
             $table->string('name');
             $table->string('password');
-            $table->unsignedBigInteger('level_id')->index();
             $table->foreign('level_id')->references('level_id')->on('m_level');
             $table->timestamps();
         });

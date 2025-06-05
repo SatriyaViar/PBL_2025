@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +13,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Disable foreign key checks during seeding
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Truncate tables to avoid duplicate issues
+        DB::table('m_user')->truncate();
+        DB::table('m_level')->truncate();
+
+        // Seed in correct order
+        $this->call([
+            LevelSeeder::class,
+            UserSeeder::class,
+        ]);
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

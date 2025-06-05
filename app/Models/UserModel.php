@@ -15,20 +15,18 @@ class UserModel extends Authenticatable
     protected $primaryKey = 'user_id';
 
     protected $fillable = [
-        'username', 
-        'email',
-        'nidn',
-        'nama', 
-        'password', 
         'level_id',
+        'username', 
+        'nidn',
+        'email',
+        'name', 
+        'password', 
         ];
 
     protected $hidden = ['password'];
 
-    protected $casts = ['password' => 'hashed'];
-
     public function level(): BelongsTo
     {
-        return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+        return $this->belongsTo(LevelModel::class, 'level_id');
     }
 }

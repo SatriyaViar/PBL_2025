@@ -14,11 +14,7 @@ class LevelModel extends Model
 
    //untuk mengizinkan mass assignment
     protected $fillable = [
-        'level_kode', 
-        'level_nama',
+        'level_code', 
+        'level_name',
     ];
-
-    function  users() : HasMany {
-        return $this->hasMany(User::class);
-    }
 }

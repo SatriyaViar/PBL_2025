@@ -14,10 +14,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('m_users')->insert([
+        DB::table('m_user')->insert([
             [
                 'level_id' => 1, // Pastikan ini sesuai dengan level_id yang ada di m_levels
                 'username' => 'admin',
+                'nidn' => 'null',
                 'email' => 'admin@gmail.com',
                 'name' => 'Admin User',
                 'password' => Hash::make('12345678'), // Password yang sudah di-hash
