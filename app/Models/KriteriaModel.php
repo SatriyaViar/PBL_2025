@@ -12,7 +12,8 @@ class KriteriaModel extends Model
 
     protected $table = 'm_kriteria';
     protected $primaryKey = 'kriteria_id';
-
+    public $timestamps = false;
+    
     //untuk mengizinkan mass assignment
     protected $fillable = ['user_id', 'kriteria_nama', 'kriteria_link'];
 

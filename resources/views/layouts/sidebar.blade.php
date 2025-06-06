@@ -75,40 +75,16 @@
         <div id="kriteriaAkreditasiPPEP" class="collapse" aria-labelledby="headingPages"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Kriteria Akreditasi:</h6>
                 <div id="ppep-sidebar-container">
-                    <!-- Data akan dimuat via JS -->
+                    @include('partials.sidebar_kriteria', ['kriteriaList' => $kriteriaList])
                 </div>
+
+
+
                 <div class="collapse-divider"></div>
             </div>
         </div>
     </li>
 </ul>
-<script>
-    function loadSidebarKriteria() {
-        fetch('/sidebar/kriteria-ppep')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.getElementById('ppep-sidebar-container');
-
-                // Bersihkan dulu isi sebelumnya
-                container.innerHTML = '<h6 class="collapse-header">Kriteria Akreditasi:</h6>';
-
-                // Tambahkan link dari data
-                data.forEach(item => {
-                    const link = document.createElement('a');
-                    link.className = 'collapse-item';
-                    link.href = '/ppep/' + item.kriteria_id; // atur link sesuai kebutuhanmu
-                    link.textContent = item.kriteria_nama;
-                    container.appendChild(link);
-                });
-
-                const divider = document.createElement('div');
-                divider.className = 'collapse-divider';
-                container.appendChild(divider);
-            });
-    }
-
-    document.addEventListener('DOMContentLoaded', loadSidebarKriteria);
-</script>
-
 <!-- End of Sidebar -->

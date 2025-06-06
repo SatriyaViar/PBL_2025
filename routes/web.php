@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,12 +26,18 @@ Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
 Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
-Route::get('/sidebar/kriteria-ppep', function () {
-    return \App\Models\KriteriaModel::select('kriteria_id', 'kriteria_nama')->get();
+// routes/web.php
+Route::get('/sidebar/kriteria', function () {
+    $kriteria = \App\Models\KriteriaModel::all();
+    return view('partials.ppep_sidebar', compact('kriteria'));
 });
 
 
+
+
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/sidebar', [SidebarController::class, 'refreshSidebar']);
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -86,3 +93,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [KriteriaController::class, 'destroy']);
     });
 });
+Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
+
+

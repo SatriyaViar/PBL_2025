@@ -23,7 +23,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         // Bagikan data ke sidebar view
         View::composer('layouts.sidebar', function ($view) {
-            $view->with('kriterias', KriteriaModel::all());
+            $view->with('kriteriaList', KriteriaModel::all());
         });
     }
 }

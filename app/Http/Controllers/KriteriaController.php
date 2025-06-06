@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KriteriaModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -22,7 +23,7 @@ class KriteriaController extends Controller
         ];
 
         $activeMenu = 'kriteria';
-        $kriteria = KriteriaModel::all();
+        $kriteriaList = KriteriaModel::all();
         $user = UserModel::all();
 
         return view('kriteria.index', [
@@ -30,15 +31,14 @@ class KriteriaController extends Controller
             'page' => $page,
             'activeMenu' => $activeMenu,
             'user'   => $user,
-
+            compact('kriteriaList')
         ]);
     }
 
-    public function getSidebarKriteria()
+    public function somePage()
     {
-        $kriteria = KriteriaModel::all(['kriteria_id', 'kriteria_nama']);
-
-        return response()->json($kriteria);
+        $kriteriaList = KriteriaModel::all(); // Atau bisa juga where tertentu
+        return view('layouts.sidebar', compact('kriteriaList')); // atau view lainmu
     }
 
 

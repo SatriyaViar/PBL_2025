@@ -69,7 +69,7 @@
                                 text: response.message
                             });
                             dataKriteria.ajax.reload();
-                            loadSidebarKriteria();
+                            $('#ppep-sidebar-container').load('/sidebar #ppep-sidebar-container > *');
                         } else {
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {
