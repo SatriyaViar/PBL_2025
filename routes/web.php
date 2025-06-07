@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\PPEPController;
 use App\Http\Controllers\SidebarController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -92,7 +95,16 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [KriteriaController::class, 'delete_ajax']);
         Route::delete('/{id}', [KriteriaController::class, 'destroy']);
     });
+    Route::prefix('dokumen/{kriteria}/{jenis}')->group(function () {
+        Route::get('/', [DokumenController::class, 'index']);
+        Route::get('/create', [DokumenController::class, 'create']);
+        Route::post('/', [DokumenController::class, 'store']);
+        Route::get('/{id}/edit', [DokumenController::class, 'edit']);
+        Route::put('/{id}', [DokumenController::class, 'update']);
+        Route::delete('/{id}', [DokumenController::class, 'destroy']);
+    });
+    Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
+
+    Route::post('ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
+
 });
-Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
-
-

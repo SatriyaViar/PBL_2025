@@ -79,9 +79,6 @@
                 <div id="ppep-sidebar-container">
                     @include('partials.sidebar_kriteria', ['kriteriaList' => $kriteriaList])
                 </div>
-
-
-
                 <div class="collapse-divider"></div>
             </div>
         </div>
