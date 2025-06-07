@@ -18,15 +18,30 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::pattern('id', '[0-9]+');
-Route::get('/', function () {return view('landing');});
-Route::get('/dasboard', [DashboardController::class, 'index']);
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
 
+// Auth Routes
 Route::get('/login', [AuthController::class, 'viewLogin'])->name('login.view');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postlogin']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Redirect root ke dashboard jika sudah login
+Route::get('/home', function () {
+    return redirect()->route('dashboard');
+});
+
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return view('landing');
+})->name('home');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dasboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);

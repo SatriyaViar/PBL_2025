@@ -55,7 +55,7 @@
             width: 130px;
             height: 130px;
             border-radius: 20%;
-            object-fit: contain;            
+            object-fit: contain;
         }
 
         .login-title {
@@ -278,8 +278,26 @@
             Login successful!
         </div>
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+
         <!-- Login Form -->
-        <form method="POST" action="#" onsubmit="return false;">
+        <form method="POST" action="{{ url('login') }}" id="form-login">
+            @csrf
             <!-- Username Field -->
             <div class="form-group">
                 <input type="text" class="form-control" id="username" name="username" placeholder="Username"
@@ -323,50 +341,66 @@
         </div>
     </div>
 
-    <script>
-        // Demo functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-
-            // Add some interactive behavior for demo
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Simple validation for demo
-                if (!usernameInput.value.trim()) {
-                    usernameInput.classList.add('is-invalid');
-                    usernameInput.nextElementSibling.style.display = 'block';
-                } else {
-                    usernameInput.classList.remove('is-invalid');
-                    usernameInput.nextElementSibling.style.display = 'none';
-                }
-
-                if (!passwordInput.value.trim()) {
-                    passwordInput.classList.add('is-invalid');
-                    passwordInput.nextElementSibling.style.display = 'block';
-                } else {
-                    passwordInput.classList.remove('is-invalid');
-                    passwordInput.nextElementSibling.style.display = 'none';
-                }
-
-                if (usernameInput.value.trim() && passwordInput.value.trim()) {
-                    document.querySelector('.alert-success').style.display = 'block';
-                    setTimeout(() => {
-                        document.querySelector('.alert-success').style.display = 'none';
-                    }, 3000);
-                }
-            });
-
-            // Clear validation on input
-            [usernameInput, passwordInput].forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.classList.contains('is-invalid')) {
-                        this.classList.remove('is-invalid');
-                        this.nextElementSibling.style.display = 'none';
+   <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $(document).ready(function() {
+            $("#form-login").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 4,
+                        maxlength: 20
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5,
+                        maxlength: 20
                     }
-                });
+                },
+                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
+                    $.ajax({
+                        url: form.action,
+                        type: form.method,
+                        data: $(form).serialize(),
+                        success: function(response) {
+                            if (response.status) { // jika sukses
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: response.message,
+                                }).then(function() {
+                                    window.location = response.redirect;
+                                });
+                            } else { // jika error
+                                $('.error-text').text('');
+                                $.each(response.msgField, function(prefix, val) {
+                                    $('#error-' + prefix).text(val[0]);
+                                });
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi Kesalahan',
+                                    text: response.message
+                                });
+                            }
+                        }
+                    });
+                    return false;
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
             });
         });
     </script>

@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     function index() {
         $breadcrumb = (object) [
             'title' => 'Selamat Datang',
@@ -13,7 +18,11 @@ class DashboardController extends Controller
         ];
 
         $activeMenu = 'dashboard';
+        
+        // Tambahkan data yang diperlukan
+        $countdosen = 0; // Ganti dengan query database yang sesuai
+        // Contoh: $countdosen = User::where('role', 'dosen')->count();
 
-        return view('welcome', ['breadcrumb' => $breadcrumb, 'activeMenu' => $activeMenu]);
+        return view('dashboard.index', compact('breadcrumb', 'activeMenu', 'countdosen'));
     }
 }
