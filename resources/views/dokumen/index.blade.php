@@ -8,49 +8,46 @@
         </div>
     </div>
 
-    {{-- Tabel dokumen --}}
-    <div class="table-responsive shadow-sm rounded mb-4">
-        <table class="table table-striped table-hover align-middle mb-0">
-            <thead class="table-light">
-                <tr>
-                    <th>Nama Dokumen</th>
-                    <th class="text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($dokumen as $item)
-                    <tr>
-                        <td>{{ $item->nama_dokumen }}</td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-warning btn-sm me-1"><i class="fas fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="2" class="text-center text-muted">Belum ada dokumen.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    {{-- Form Tambah Dokumen --}}
+    {{-- Form Dokumen --}}
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white fw-bold">
             Tambah Dokumen Baru
         </div>
         <div class="card-body">
-            <form action="{{ url('/dokumen/' . $kriteria_nama . '/' . strtolower(substr($label, 0, 1))) }}" method="POST">
+            <form id="form-dokumen" action="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_list . '/store') }}"
+                method="POST" enctype="multipart/form-data">
                 @csrf
+
+                {{-- Description --}}
                 <div class="mb-3">
-                    <label for="nama_dokumen" class="form-label">Nama Dokumen</label>
-                    <input type="text" name="nama_dokumen" id="nama_dokumen" class="form-control" required>
+                    <label for="description" class="form-label">Isi Dokumen</label>
+                    <textarea name="description" id="summernote" class="form-control" placeholder="description" rows="10"></textarea>
                 </div>
 
+                {{-- Pilihan tipe dokumen --}}
                 <div class="mb-3">
-                    <label for="isi_dokumen" class="form-label">Isi Dokumen</label>
-                    <textarea name="isi_dokumen" id="isi_dokumen" class="form-control" required></textarea>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipe_dokumen" id="tipe_file" value="file"
+                            checked>
+                        <label class="form-check-label" for="tipe_file">Upload File</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tipe_dokumen" id="tipe_link" value="link">
+                        <label class="form-check-label" for="tipe_link">Input Link</label>
+                    </div>
+                </div>
+
+                {{-- Input untuk file --}}
+                <div class="mb-3" id="input-file-group">
+                    <label for="file_pendukung" class="form-label">File Pendukung</label>
+                    <input type="file" name="file_pendukung" id="file_pendukung" class="form-control">
+                </div>
+
+                {{-- Input untuk link --}}
+                <div class="mb-3" id="input-link-group" style="display: none;">
+                    <label for="link" class="form-label">Link Pendukung</label>
+                    <input type="url" name="link" id="link" class="form-control"
+                        placeholder="https://contoh.com">
                 </div>
 
                 <button type="submit" class="btn btn-success">
@@ -59,17 +56,140 @@
             </form>
         </div>
     </div>
-@endsection
 
-@push('scripts')
-    {{-- CKEditor CDN --}}
-    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace('isi_dokumen', {
-            height: 300,
-            filebrowserUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token() ]) }}",
-            filebrowserUploadMethod: 'form'
+        document.addEventListener('DOMContentLoaded', function() {
+            const tipeFile = document.getElementById('tipe_file');
+            const tipeLink = document.getElementById('tipe_link');
+            const fileGroup = document.getElementById('input-file-group');
+            const linkGroup = document.getElementById('input-link-group');
+
+            function toggleInput() {
+                if (tipeFile.checked) {
+                    fileGroup.style.display = 'block';
+                    linkGroup.style.display = 'none';
+                    // Clear link input
+                    document.getElementById('link').value = '';
+                } else if (tipeLink.checked) {
+                    fileGroup.style.display = 'none';
+                    linkGroup.style.display = 'block';
+                    // Clear file input
+                    document.getElementById('file_pendukung').value = '';
+                }
+            }
+
+            tipeFile.addEventListener('change', toggleInput);
+            tipeLink.addEventListener('change', toggleInput);
+
+            toggleInput(); // inisialisasi saat halaman load
+
+            // Init Summernote
+            $('#summernote').summernote({
+                height: 200,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+
+        // Handle form submit AJAX - PERBAIKAN
+        $('#form-dokumen').on('submit', function(e) {
+            e.preventDefault();
+            $('.error-text').text('');
+
+            const form = this;
+            const formData = new FormData(form);
+
+            // Pastikan konten Summernote ter-capture dengan benar
+            const summernoteContent = $('#summernote').summernote('code');
+            console.log('Summernote content:', summernoteContent); // Debug log
+
+            formData.set('description', summernoteContent);
+
+            // Debug: lihat semua data yang akan dikirim
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            $.ajax({
+                url: form.action,
+                method: form.method,
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                beforeSend: function() {
+                    // Tampilkan loading
+                    Swal.fire({
+                        title: 'Menyimpan...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
+                success: function(response) {
+                    Swal.close();
+
+                    if (response.status) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: response.message
+                        }).then(() => {
+                            // Reset form
+                            form.reset();
+                            $('#summernote').summernote('code', '');
+                            toggleInput(); // reset tampilan input file/link
+                        });
+                    } else {
+                        // Handle validation errors
+                        if (response.msgField) {
+                            let errorMessage = '';
+                            $.each(response.msgField, function(field, messages) {
+                                errorMessage += messages.join(', ') + '\n';
+                            });
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Validasi Gagal',
+                                text: errorMessage
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: response.message || 'Terjadi kesalahan'
+                            });
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.close();
+                    console.error('AJAX Error:', xhr.responseText); // Debug log
+
+                    let errorMessage = 'Terjadi kesalahan saat menyimpan data.';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: errorMessage
+                    });
+                }
+            });
         });
     </script>
-@endpush
-w
+@endsection

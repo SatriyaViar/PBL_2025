@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('t_pelaksanaan', function (Blueprint $table) {
             $table->id('pelaksanaan_id');
             $table->unsignedBigInteger('kriteria_id')->index();
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('link')->nullable();
             $table->string('file_pendukung')->nullable();
             $table->timestamps();

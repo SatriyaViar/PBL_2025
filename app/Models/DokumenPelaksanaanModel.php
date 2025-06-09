@@ -13,12 +13,13 @@ class DokumenPelaksanaanModel extends Model
     protected $primaryKey = 'pelaksanaan_id';
     
     protected $fillable = [
-        'pelaksanaan_id',
         'kriteria_id',
         'description',
         'link',
         'file_pendukung',
     ];
+
+    public $timestamps = true;
 
     function kriteria() {
         return $this->belongsTo(KriteriaModel::class, 'kriteria_id', 'kriteria_id');
