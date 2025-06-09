@@ -26,6 +26,7 @@ class PPEPController extends Controller
             'list'  => ['Home', 'Kriteria', $kriteria_nama ?? 'Semua'],
         ];
 
+        
         $page = (object)[
             'title' => 'Kriteria Akreditasi' . ($kriteria_nama ? ' - ' . $kriteria_nama : ''),
         ];

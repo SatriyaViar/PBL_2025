@@ -8,6 +8,50 @@
         </div>
     </div>
 
+    {{-- Daftar Dokumen --}}
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header bg-secondary text-white fw-bold">
+            Daftar Dokumen
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Isi Dokumen</th>
+                        <th>Jenis</th>
+                        <th>Link/File</th>
+                        <th>Diupload Pada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($dokumens as $index => $dokumen)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{!! Str::limit(strip_tags($dokumen->description), 100) !!}</td>
+                            <td>{{ ucfirst($dokumen->tipe_dokumen) }}</td>
+                            <td>
+                                @if ($dokumen->tipe_dokumen == 'file')
+                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary">Lihat File</a>
+                                @else
+                                    <a href="{{ $dokumen->link }}" target="_blank"
+                                        class="btn btn-sm btn-outline-success">Lihat Link</a>
+                                @endif
+                            </td>
+                            <td>{{ $dokumen->created_at->format('d M Y H:i') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Belum ada dokumen.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
     {{-- Form Dokumen --}}
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white fw-bold">
@@ -121,8 +165,6 @@
                 url: form.action,
                 method: form.method,
                 data: formData,
-                processData: false,
-                contentType: false,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     'X-Requested-With': 'XMLHttpRequest'

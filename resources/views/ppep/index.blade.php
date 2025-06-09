@@ -27,7 +27,7 @@
                                 <div class="mt-3">
                                     <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode) }}" 
                                        class="btn btn-{{ $jenis['color'] }} btn-sm btn-block">
-                                        <i class="fas fa-arrow-right"></i> Tambah Dokumen
+                                        <i class="fas fa-plus"></i> Tambah Dokumen
                                     </a>
                                 </div>
                             </div>

@@ -95,9 +95,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [KriteriaController::class, 'delete_ajax']);
         Route::delete('/{id}', [KriteriaController::class, 'destroy']);
     });
-    Route::prefix('/dokumen/{kriteria_nama}/{jenis_list}')->group(function () {
-        Route::get('/', [DokumenController::class, 'index']);
-        Route::post('/store', [DokumenController::class, 'store']);
+    Route::prefix('dokumen')->group(function () {
+        Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
+        Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
     });
+
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
 });
