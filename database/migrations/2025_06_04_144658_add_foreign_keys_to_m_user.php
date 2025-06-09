@@ -12,7 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('m_user', function (Blueprint $table) {
-             $table->string('image');
+            // Remove existing foreign key if it exists
+            $table->dropForeign(['level_id']);
+
+            // Re-add with proper constraints
+            $table->foreign('level_id')
+                ->references('level_id')
+                ->on('m_level')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
@@ -22,7 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('m_user', function (Blueprint $table) {
-            $table->dropColumn('image');
+            //
         });
     }
 };

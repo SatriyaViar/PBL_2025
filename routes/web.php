@@ -3,17 +3,8 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\KriteriaController;
-/*use App
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
+
 Route::get('/', function () {
     return view('landing');
 });
@@ -24,7 +15,7 @@ Route::get('/register', function () {
     return view('register');
 });
 
-Route::get('/kriteria', [KriteriaController::class, 'index'])->name('kriteria.index');
+
 
 Route::get('/dashboard', [DashboardController::class, 'index']);
 
@@ -49,3 +40,40 @@ Route::group(['prefix' => 'user'], function () {
 Route::view('/denah/lantai5', 'denah.lantai5');
 Route::view('/denah/lantai6', 'denah.lantai6');
 Route::view('/denah/lantai7', 'denah.lantai7');
+
+// Route untuk setiap criteria
+Route::get('/kriteria/1', function () {
+    return view('kriteria.kriteria1');
+});
+
+Route::get('/kriteria/2', function () {
+    return view('kriteria.criteria2');
+});
+
+Route::get('/kriteria/3', function () {
+    return view('kriteria.criteria3');
+});
+
+Route::get('/kriteria/4', function () {
+    return view('kriteria.criteria4');
+});
+
+Route::get('/kriteria/5', function () {
+    return view('kriteria.criteria5');
+});
+
+Route::get('/kriteria/6', function () {
+    return view('kriteria.criteria6');
+});
+
+Route::get('/kriteria/7', function () {
+    return view('kriteria.criteria7');
+});
+
+Route::get('/kriteria/8', function () {
+    return view('kriteria.criteria8');
+});
+
+Route::get('/kriteria/9', function () {
+    return view('kriteria.criteria9');
+});

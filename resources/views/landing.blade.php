@@ -51,13 +51,35 @@
         <ul>
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
-           <a href="{{ route('kriteria.index') }}"><span>Criteria</span></a>
-        <li class="dropdown"><a href="#"><span>Building Plan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="{{ url('/denah/lantai5') }}">5th floor</a></li>
-<li><a href="{{ url('/denah/lantai6') }}">6th floor</a></li>
-<li><a href="{{ url('/denah/lantai7') }}">7th floor</a></li>
-          </li>
+           {{-- <a href="{{ route('kriteria.index') }}"><span>Criteria</span></a> --}}
+        <!-- Dropdown 1: Building Plan -->
+<li class="dropdown">
+  <a href="#"><span>Building Plan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+  <ul>
+    <li><a href="{{ url('/denah/lantai5') }}">5th floor</a></li>
+    <li><a href="{{ url('/denah/lantai6') }}">6th floor</a></li>
+    <li><a href="{{ url('/denah/lantai7') }}">7th floor</a></li>
+  </ul>
+</li>
+
+<!-- Dropdown 2: Room List (PASTIKAN di luar <ul> milik Building Plan) -->
+<li class="dropdown">
+  <a href="#"><span>Criteria</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+  <ul>
+    <li><a href="{{ url('/kriteria/1') }}">Criteria 1</a></li>
+    <li><a href="{{ url('/kriteria/2') }}">Criteria 2</a></li>
+    <li><a href="{{ url('/kriteria/3') }}">Criteria 3</a></li>
+    <li><a href="{{ url('/kriteria/4') }}">Criteria 4</a></li>
+    <li><a href="{{ url('/kriteria/5') }}">Criteria 5</a></li>
+    <li><a href="{{ url('/kriteria/6') }}">Criteria 6</a></li>
+    <li><a href="{{ url('/kriteria/7') }}">Criteria 7</a></li>
+    <li><a href="{{ url('/kriteria/8') }}">Criteria 8</a></li>
+    <li><a href="{{ url('/kriteria/9') }}">Criteria 9</a></li>
+  </ul>
+</li>
+
+
+
          <li class="sitename">
 </li>
 
@@ -185,5 +207,3 @@ D4 Business Information System Study Program</h1>
   <script src="assets/js/main.js"></script>
 
 </body>
-
-</html>
