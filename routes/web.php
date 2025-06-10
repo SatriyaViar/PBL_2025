@@ -98,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('dokumen')->group(function () {
         Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
+        Route::get('/{kriteria}/{jenis_list}/list', [DokumenController::class, 'list']);
     });
 
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');

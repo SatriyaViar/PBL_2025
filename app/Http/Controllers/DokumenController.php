@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\DokumenPelaksanaanModel;
 use App\Models\KriteriaModel;
-use App\Models\PenetapanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -51,9 +50,25 @@ class DokumenController extends Controller
             compact('breadcrumb', 'kriteria_nama', 'activeMenu', 'dokumen', 'label', 'breadcrumb', 'activeMenu', 'jenis_list', 'dokumens')
         );
     }
+
+    public function list($kriteria_nama)
+    {
+        $dokumens = DokumenPelaksanaanModel::where('kriteria_id', $kriteria_nama)
+            ->get();
+
+        $dokumens->map(function ($item) {
+            $item->file_url = $item->file_pendukung ? asset('storage/' . $item->file_pendukung) : null;
+            return $item;
+        });
+
+        return response()->json([
+            'status' => true,
+            'data' => $dokumens
+        ]);
+    }
+
     public function store(Request $request, $kriteria_nama, $jenis_list)
     {
-        dd($request->ajax());
         try {
             // Validasi kriteria
             $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();

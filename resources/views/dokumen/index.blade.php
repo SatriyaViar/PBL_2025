@@ -17,7 +17,6 @@
             <form id="form-dokumen" action="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_list . '/store') }}"
                 method="POST" enctype="multipart/form-data">
                 @csrf
-
                 {{-- Description --}}
                 <div class="mb-3">
                     <label for="description" class="form-label">Isi Dokumen</label>
