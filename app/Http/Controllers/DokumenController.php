@@ -53,6 +53,7 @@ class DokumenController extends Controller
     }
     public function store(Request $request, $kriteria_nama, $jenis_list)
     {
+        dd($request->ajax());
         try {
             // Validasi kriteria
             $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();

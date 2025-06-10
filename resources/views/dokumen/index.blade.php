@@ -8,50 +8,6 @@
         </div>
     </div>
 
-    {{-- Daftar Dokumen --}}
-    <div class="card mt-4 shadow-sm">
-        <div class="card-header bg-secondary text-white fw-bold">
-            Daftar Dokumen
-        </div>
-        <div class="card-body table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Isi Dokumen</th>
-                        <th>Jenis</th>
-                        <th>Link/File</th>
-                        <th>Diupload Pada</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($dokumens as $index => $dokumen)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{!! Str::limit(strip_tags($dokumen->description), 100) !!}</td>
-                            <td>{{ ucfirst($dokumen->tipe_dokumen) }}</td>
-                            <td>
-                                @if ($dokumen->tipe_dokumen == 'file')
-                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank"
-                                        class="btn btn-sm btn-outline-primary">Lihat File</a>
-                                @else
-                                    <a href="{{ $dokumen->link }}" target="_blank"
-                                        class="btn btn-sm btn-outline-success">Lihat Link</a>
-                                @endif
-                            </td>
-                            <td>{{ $dokumen->created_at->format('d M Y H:i') }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">Belum ada dokumen.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
     {{-- Form Dokumen --}}
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white fw-bold">
@@ -109,128 +65,245 @@
             const linkGroup = document.getElementById('input-link-group');
 
             function toggleInput() {
-                if (tipeFile.checked) {
+                if (tipeFile && tipeFile.checked) {
                     fileGroup.style.display = 'block';
                     linkGroup.style.display = 'none';
                     // Clear link input
-                    document.getElementById('link').value = '';
-                } else if (tipeLink.checked) {
+                    const linkInput = document.getElementById('link');
+                    if (linkInput) linkInput.value = '';
+                } else if (tipeLink && tipeLink.checked) {
                     fileGroup.style.display = 'none';
                     linkGroup.style.display = 'block';
                     // Clear file input
-                    document.getElementById('file_pendukung').value = '';
+                    const fileInput = document.getElementById('file_pendukung');
+                    if (fileInput) fileInput.value = '';
                 }
             }
 
-            tipeFile.addEventListener('change', toggleInput);
-            tipeLink.addEventListener('change', toggleInput);
+            // Add event listeners if elements exist
+            if (tipeFile) tipeFile.addEventListener('change', toggleInput);
+            if (tipeLink) tipeLink.addEventListener('change', toggleInput);
 
             toggleInput(); // inisialisasi saat halaman load
 
             // Init Summernote
-            $('#summernote').summernote({
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        });
-
-        // Handle form submit AJAX - PERBAIKAN
-        $('#form-dokumen').on('submit', function(e) {
-            e.preventDefault();
-            $('.error-text').text('');
-
-            const form = this;
-            const formData = new FormData(form);
-
-            // Pastikan konten Summernote ter-capture dengan benar
-            const summernoteContent = $('#summernote').summernote('code');
-            console.log('Summernote content:', summernoteContent); // Debug log
-
-            formData.set('description', summernoteContent);
-
-            // Debug: lihat semua data yang akan dikirim
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
+            if (typeof $ !== 'undefined' && $.fn.summernote) {
+                $('#summernote').summernote({
+                    height: 200,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
+                });
             }
 
-            $.ajax({
-                url: form.action,
-                method: form.method,
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                beforeSend: function() {
-                    // Tampilkan loading
-                    Swal.fire({
-                        title: 'Menyimpan...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                },
-                success: function(response) {
-                    Swal.close();
+            // Handle form submit AJAX - PERBAIKAN
+            $(document).on('submit', '#form-dokumen', function(e) {
+                e.preventDefault();
 
-                    if (response.status) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: response.message
-                        }).then(() => {
-                            // Reset form
-                            form.reset();
-                            $('#summernote').summernote('code', '');
-                            toggleInput(); // reset tampilan input file/link
-                        });
-                    } else {
-                        // Handle validation errors
-                        if (response.msgField) {
-                            let errorMessage = '';
-                            $.each(response.msgField, function(field, messages) {
-                                errorMessage += messages.join(', ') + '\n';
-                            });
+                // Clear previous error messages
+                $('.error-text').text('');
+                $('.is-invalid').removeClass('is-invalid');
 
+                const form = this;
+                const formData = new FormData(form);
+
+                // Pastikan konten Summernote ter-capture dengan benar
+                if (typeof $ !== 'undefined' && $.fn.summernote) {
+                    const summernoteContent = $('#summernote').summernote('code');
+                    console.log('Summernote content:', summernoteContent); // Debug log
+                    formData.set('description', summernoteContent);
+                }
+
+                // Set tipe dokumen berdasarkan radio button yang dipilih
+                const tipeFile = document.getElementById('tipe_file');
+                const tipeLink = document.getElementById('tipe_link');
+
+                if (tipeFile && tipeFile.checked) {
+                    formData.set('tipe_dokumen', 'file');
+                } else if (tipeLink && tipeLink.checked) {
+                    formData.set('tipe_dokumen', 'link');
+                }
+
+                // Debug: lihat semua data yang akan dikirim
+                console.log('FormData contents:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, ':', value);
+                }
+
+                $.ajax({
+                    url: form.action,
+                    method: form.method || 'POST',
+                    data: formData,
+                    processData: false, // Penting untuk file upload
+                    contentType: false, // Penting untuk file upload
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    beforeSend: function() {
+                        // Tampilkan loading
+                        if (typeof Swal !== 'undefined') {
                             Swal.fire({
-                                icon: 'error',
-                                title: 'Validasi Gagal',
-                                text: errorMessage
+                                title: 'Menyimpan...',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                showConfirmButton: false,
+                                didOpen: () => {
+                                    Swal.showLoading();
+                                }
                             });
+                        }
+                    },
+                    success: function(response) {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.close();
+                        }
+
+                        console.log('Success response:', response); // Debug log
+
+                        if (response.status === true || response.status === 'true') {
+                            if (typeof Swal !== 'undefined') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berhasil',
+                                    text: response.message || 'Data berhasil disimpan'
+                                }).then(() => {
+                                    // Reset form
+                                    form.reset();
+
+                                    // Reset Summernote
+                                    if (typeof $ !== 'undefined' && $.fn.summernote) {
+                                        $('#summernote').summernote('code', '');
+                                    }
+
+                                    // Reset tampilan input file/link
+                                    toggleInput();
+
+                                    // Optional: reload page atau redirect
+                                    // window.location.reload();
+                                });
+                            } else {
+                                alert(response.message || 'Data berhasil disimpan');
+                                form.reset();
+                                if (typeof $ !== 'undefined' && $.fn.summernote) {
+                                    $('#summernote').summernote('code', '');
+                                }
+                                toggleInput();
+                            }
                         } else {
+                            // Handle validation errors
+                            if (response.msgField) {
+                                displayValidationErrors(response.msgField);
+                            }
+
+                            if (typeof Swal !== 'undefined') {
+                                let errorMessage = response.message ||
+                                    'Terjadi kesalahan validasi';
+
+                                if (response.msgField) {
+                                    errorMessage = 'Periksa kembali data yang diinput';
+                                }
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Validasi Gagal',
+                                    text: errorMessage
+                                });
+                            } else {
+                                alert(response.message || 'Terjadi kesalahan validasi');
+                            }
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        if (typeof Swal !== 'undefined') {
+                            Swal.close();
+                        }
+
+                        console.error('AJAX Error:', xhr.responseText); // Debug log
+                        console.error('Status:', status);
+                        console.error('Error:', error);
+
+                        let errorMessage = 'Terjadi kesalahan saat menyimpan data.';
+
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+
+                            if (response.message) {
+                                errorMessage = response.message;
+                            }
+
+                            if (response.msgField) {
+                                displayValidationErrors(response.msgField);
+                            }
+                        } catch (e) {
+                            console.error('Error parsing response:', e);
+
+                            // Handle different HTTP status codes
+                            switch (xhr.status) {
+                                case 422:
+                                    errorMessage = 'Data yang diinput tidak valid';
+                                    break;
+                                case 500:
+                                    errorMessage = 'Terjadi kesalahan server';
+                                    break;
+                                case 404:
+                                    errorMessage = 'Halaman tidak ditemukan';
+                                    break;
+                                case 403:
+                                    errorMessage = 'Akses ditolak';
+                                    break;
+                            }
+                        }
+
+                        if (typeof Swal !== 'undefined') {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal',
-                                text: response.message || 'Terjadi kesalahan'
+                                text: errorMessage
                             });
+                        } else {
+                            alert(errorMessage);
                         }
                     }
-                },
-                error: function(xhr, status, error) {
-                    Swal.close();
-                    console.error('AJAX Error:', xhr.responseText); // Debug log
+                });
+            });
 
-                    let errorMessage = 'Terjadi kesalahan saat menyimpan data.';
+            // Function to display validation errors
+            function displayValidationErrors(errors) {
+                $.each(errors, function(field, messages) {
+                    const fieldElement = $(`[name="${field}"]`);
 
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
+                    if (fieldElement.length > 0) {
+                        // Add invalid class
+                        fieldElement.addClass('is-invalid');
+
+                        // Find or create error message element
+                        let errorElement = fieldElement.closest('.form-group').find('.invalid-feedback');
+                        if (errorElement.length === 0) {
+                            errorElement = fieldElement.closest('.form-group').find('.error-text');
+                        }
+
+                        if (errorElement.length > 0) {
+                            errorElement.text(messages.join(', '));
+                        } else {
+                            // Create error element if not exists
+                            fieldElement.after(
+                            `<div class="invalid-feedback">${messages.join(', ')}</div>`);
+                        }
                     }
+                });
+            }
 
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: errorMessage
-                    });
-                }
+            // Remove validation errors on input change
+            $(document).on('input change', '.is-invalid', function() {
+                $(this).removeClass('is-invalid');
+                $(this).closest('.form-group').find('.invalid-feedback, .error-text').text('');
             });
         });
     </script>
