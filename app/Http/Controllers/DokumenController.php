@@ -141,4 +141,10 @@ class DokumenController extends Controller
             ], 500);
         }
     }
+    public function preview($kriteria_nama, $jenis_list)
+    {   
+        $dokumen = DokumenPelaksanaanModel::where('kriteria_id', $kriteria_nama)->get();
+
+        return view('dokumen.preview', compact('dokumen'));
+    }
 }
