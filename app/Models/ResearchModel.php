@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
-class LecturerResearchModel extends Model
+class ResearchModel extends Model
 {
     use HasFactory;
 
@@ -22,6 +23,6 @@ class LecturerResearchModel extends Model
 
     public function research()
     {
-        return $this->hasMany(t_lecturer_research::class, 'id_research');
+        return $this->hasMany(LecturerResearchModel::class, 'id_research');
     }
 }

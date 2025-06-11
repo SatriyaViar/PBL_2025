@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class LecturerResearchModel extends Model
 {
@@ -18,8 +19,13 @@ class LecturerResearchModel extends Model
         'status',
     ];
 
+    public function dosen()
+    {
+        return $this->belongsTo(UserModel::class, 'user_id');
+    }
+
     public function research()
     {
-        return $this->hasMany(t_lecturer_research::class, 'id_research');
+        return $this->hasMany(ResearchModel::class, 'research_id');
     }
 }
