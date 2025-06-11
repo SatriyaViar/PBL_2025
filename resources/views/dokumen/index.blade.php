@@ -1,6 +1,61 @@
 @extends('layouts.template')
 
 @section('content')
+{{-- Daftar Dokumen --}}
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white fw-bold">
+        Daftar Dokumen
+    </div>
+    <div class="card-body">
+        @if (count($dokumenList ?? []) > 0)
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Deskripsi</th>
+                            <th>Tipe</th>
+                            <th>Link / Nama File</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($dokumenList as $index => $dokumen)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{!! $dokumen->description !!}</td>
+                                <td>{{ ucfirst($dokumen->tipe_dokumen) }}</td>
+                                <td>
+                                    @if ($dokumen->tipe_dokumen == 'link')
+                                        <a href="{{ $dokumen->link }}" target="_blank">{{ $dokumen->link }}</a>
+                                    @elseif ($dokumen->tipe_dokumen == 'file')
+                                        <a href="{{ asset('storage/dokumen/' . $dokumen->file_pendukung) }}" target="_blank">
+                                            {{ $dokumen->file_pendukung }}
+                                        </a>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{-- Tambahkan tombol aksi jika diperlukan --}}
+                                    <form action="{{ route('dokumen.destroy', $dokumen->id) }}" method="POST"
+                                        onsubmit="return confirm('Yakin ingin menghapus dokumen ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="text-muted">Belum ada dokumen yang ditambahkan.</p>
+        @endif
+    </div>
+</div>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold">Dokumen {{ $label }}</h2>
@@ -14,7 +69,8 @@
             Tambah Dokumen Baru
         </div>
         <div class="card-body">
-            <form id="form-dokumen" action="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_list . '/store') }}"
+      <form id="form-dokumen" action="{{ url('/dokumen/' . $kriteria_nama . '/' . ($jenis_list ?? 'default') . '/store') }}"
+
                 method="POST" enctype="multipart/form-data">
                 @csrf
 

@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route register (di atas Route::middleware(['auth'])...)
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'postRegister']);
+
+
 Route::pattern('id', '[0-9]+');
 Route::get('/', [DashboardController::class, 'index']);
 
@@ -39,6 +44,8 @@ Route::get('/sidebar/kriteria', function () {
 
 
 Route::middleware(['auth'])->group(function () {
+    
+
 
     Route::get('/sidebar', [SidebarController::class, 'refreshSidebar']);
 
@@ -99,6 +106,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
     });
+
+Route::get('/view-data/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('viewdata');
+Route::delete('/dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+
+
 
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
 });

@@ -25,10 +25,20 @@
                                     </div>
                                 </div>
                                 <div class="mt-3">
-                                    <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode) }}" 
+
+                                    <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode) }}"
                                        class="btn btn-{{ $jenis['color'] }} btn-sm btn-block">
                                         <i class="fas fa-plus"></i> Tambah Dokumen
                                     </a>
+                                    {{-- <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode) }}"
+                                       class="btn btn-{{ $jenis['color'] }} btn-sm btn-block">
+                                        <i class="fas fa-plus"></i> Preview Dokumen
+                                    </a>
+                                    <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode) }}"
+                                       class="btn btn-{{ $jenis['color'] }} btn-sm btn-block">
+                                        <i class="fas fa-plus"></i> Delete Dokumen
+                                    </a> --}}
+
                                 </div>
                             </div>
                         </div>

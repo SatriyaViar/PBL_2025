@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DokumenPenetapanModel;
 use App\Models\DokumenPelaksanaanModel;
+use App\Models\DokumenEvaluasiModel;
+use App\Models\DokumenPengendalianModel;
+use App\Models\DokumenPeningkatanModel;
 use App\Models\KriteriaModel;
-use App\Models\PenetapanModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -12,62 +15,68 @@ use Illuminate\Support\Str;
 
 class DokumenController extends Controller
 {
-    public function index($kriteria_nama, $jenis_list)
+    // Untuk mapping jenis_list ke model dan label
+    protected function getDokumenModelAndLabel($jenis_list)
+{
+    switch (strtolower($jenis_list)) {
+        case 'penetapan':
+        case 'a':
+            return [DokumenPenetapanModel::class, 'Penetapan'];
+        case 'pelaksanaan':
+        case 'b':
+            return [DokumenPelaksanaanModel::class, 'Pelaksanaan'];
+        case 'evaluasi':
+        case 'c':
+            return [DokumenEvaluasiModel::class, 'Evaluasi'];
+        case 'pengendalian':
+        case 'd':
+            return [DokumenPengendalianModel::class, 'Pengendalian'];
+        case 'peningkatan':
+        case 'e':
+            return [DokumenPeningkatanModel::class, 'Peningkatan'];
+        default:
+            abort(404, 'Jenis dokumen tidak ditemukan');
+    }
+}
+
+
+    public function index($kriteria, $jenis_list)
     {
-        switch (strtolower($jenis_list)) {
-            // case 'a':
-            // $dokumen = DokumenPenetapan::where('kriteria', $kriteria)->get();
-            // $label = 'Penetapan';
-            // break;
-            case 'b':
-                $dokumen = DokumenPelaksanaanModel::where('kriteria_id', $kriteria_nama)->get();
-                $label = 'Pelaksanaan';
-                break;
-            case 'c':
-                // $dokumen = DokumenEvaluasi::where('kriteria', $kriteria)->get();
-                // $label = 'Evaluasi';
-                // break;
-                // case 'd':
-                //     $dokumen = DokumenPengendalian::where('kriteria', $kriteria)->get();
-                //     $label = 'Pengendalian';
-                //     break;
-                // case 'e':
-                //     $dokumen = DokumenPeningkatan::where('kriteria', $kriteria)->get();
-                //     $label = 'Peningkatan';
-                //     break;
-            default:
-                abort(404, 'Jenis dokumen tidak ditemukan');
-        }
+        [$model, $label] = $this->getDokumenModelAndLabel($jenis_list);
+
+        // Mengambil data kriteria berdasarkan nama
+        $kriteriaModel = KriteriaModel::where('kriteria_nama', $kriteria)->firstOrFail();
+
+        // Mengambil data dokumen berdasarkan kriteria_id
+        $dokumens = $model::where('kriteria_id', $kriteriaModel->kriteria_id)->get();
 
         $breadcrumb = (object)[
             'title' => 'Dokumen Kriteria',
-            'list'  => ['Home', $kriteria_nama, $label],
+            'list'  => ['Home', $kriteria, $label],
         ];
 
         $activeMenu = 'Dokumen Akreditasi';
-        $dokumens = DokumenPelaksanaanModel::where('kriteria_id', $kriteria_nama);
-        return view(
-            'dokumen.index',
-            compact('breadcrumb', 'kriteria_nama', 'activeMenu', 'dokumen', 'label', 'breadcrumb', 'activeMenu', 'jenis_list', 'dokumens')
-        );
+
+        return view('dokumen.index', [
+            'breadcrumb' => $breadcrumb,
+            'kriteria_nama' => $kriteria,
+            'activeMenu' => $activeMenu,
+            'dokumens' => $dokumens,
+            'label' => $label,
+            'jenis_list' => $jenis_list
+        ]);
     }
-    public function store(Request $request, $kriteria_nama, $jenis_list)
+
+    public function store(Request $request, $kriteria, $jenis_list)
     {
-        dd($request->ajax());
         try {
-            // Validasi kriteria
-            $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
-            if (!$kriteria) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Kriteria tidak ditemukan.',
-                    'msgField' => ['kriteria' => ['Kriteria tidak valid.']]
-                ], 404);
-            }
+            // Cari kriteria berdasarkan nama
+            $kriteriaModel = KriteriaModel::where('kriteria_nama', $kriteria)->firstOrFail();
+
+            [$model, $label] = $this->getDokumenModelAndLabel($jenis_list);
 
             $tipe = $request->input('tipe_dokumen');
 
-            // Validasi input
             $rules = [
                 'description' => 'required|string',
                 'tipe_dokumen' => 'required|in:file,link',
@@ -96,7 +105,6 @@ class DokumenController extends Controller
                 ], 422);
             }
 
-            // Proses file jika ada
             $filePath = null;
             if ($tipe === 'file' && $request->hasFile('file_pendukung')) {
                 $file = $request->file('file_pendukung');
@@ -104,9 +112,8 @@ class DokumenController extends Controller
                 $filePath = $file->storeAs('dokumen', $fileName, 'public');
             }
 
-            // Simpan data
-            DokumenPelaksanaanModel::create([
-                'kriteria_id' => $kriteria->kriteria_id,
+            $model::create([
+                'kriteria_id' => $kriteriaModel->kriteria_id,
                 'description' => $request->input('description'),
                 'link' => $tipe === 'link' ? $request->input('link') : null,
                 'file_pendukung' => $filePath,
@@ -116,7 +123,7 @@ class DokumenController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Dokumen berhasil disimpan',
-                'redirect' => route('dokumen.index', ['kriteria' => $kriteria_nama, 'jenis_list' => $jenis_list])
+                'redirect' => route('dokumen.index', ['kriteria' => $kriteria, 'jenis_list' => $jenis_list])
             ]);
         } catch (\Exception $e) {
             Log::error('Error in DokumenController@store: ' . $e->getMessage());

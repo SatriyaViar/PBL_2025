@@ -83,5 +83,17 @@
             </div>
         </div>
     </li>
+<!-- View Data -->
+<li class="nav-item">
+    <a class="nav-link {{ $activeMenu == 'viewdata' ? 'active' : '' }}" href="{{ url('/view-data/kriteria4/penetapan') }}">
+    <i class="fas fa-fw fa-table"></i>
+    <span>View Data</span>
+</a>
+
+</li>
+
+
+
 </ul>
+
 <!-- End of Sidebar -->
