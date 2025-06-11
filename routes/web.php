@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
+use App\Http\Controllers\TPenelitianDosenController;
+use App\Http\Controllers\TPenelitianDosenKoordinatorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 /*use App
@@ -25,23 +27,22 @@ Route::get('/', function () {
 // Auth Routes
 Route::get('/login', [AuthController::class, 'viewLogin'])->name('login.view');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Redirect root ke dashboard jika sudah login
-Route::get('/home', function () {
-    return redirect()->route('dashboard');
-});
+// Route::get('/home', function () {
+//     return redirect()->route('dashboard');
+// });
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return view('landing');
-})->name('home');
+// Route::get('/', function () {
+//     if (auth()->check()) {
+//         return redirect()->route('dashboard');
+//     }
+//     return view('landing');
+// })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dasboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -78,4 +79,15 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
         Route::delete('/{id}', [LevelController::class, 'destroy']);
     });
+
+    // Route::resource('penelitian-dosen', TPenelitianDosenController::class);
+    // Route::post('penelitian-dosen/list/data', [TPenelitianDosenController::class, 'list'])->name('penelitian-dosen.list');
+    // //statusPenelitian
+    // Route::put('penelitian-dosen/{id}/status', [TPenelitianDosenController::class, 'statusPenelitian'])->name('penelitian-dosen.status');
+    // Route::get('penelitian-dosen/{id}/delete', [TPenelitianDosenController::class, 'confirm']);
+
+    // Route::resource('penelitian-dosen-koordinator', TPenelitianDosenKoordinatorController::class);
+    // Route::post('penelitian-dosen-koordinator/list/data', [TPenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-dosen-koordinator.list');
+    // Route::get('penelitian-dosen-koordinator/{id}/delete', [TPenelitianDosenKoordinatorController::class, 'confirm']);
+
 });

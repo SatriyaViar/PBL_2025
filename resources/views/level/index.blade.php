@@ -65,14 +65,14 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: "level_kode",
+                    data: "level_code",
                     className: "",
                     // orderable: true, jika ingin kolom ini bisa diurutkan  
                     orderable: true,
                     // searchable: true, jika ingin kolom ini bisa dicari 
                     searchable: true
                 }, {
-                    data: "level_nama",
+                    data: "level_name",
                     className: "",
                     orderable: true,
                     searchable: true

@@ -24,7 +24,7 @@
                             <select class="form-control" id="level_id" name="level_id" required>
                                 <option value="">- Semua -</option>
                                 @foreach ($level as $item)
-                                    <option value="{{ $item->level_id }}">{{ $item->level_nama }}</option>
+                                    <option value="{{ $item->level_id }}">{{ $item->level_name }}</option>
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Level Pengguna</small>
@@ -47,7 +47,8 @@
             </table>
         </div>
     </div>
-    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 
@@ -61,6 +62,29 @@
                 $('#myModal').modal('show');
             });
         }
+
+        function deleteUser(user_id) {
+            if (confirm("Yakin ingin menghapus user ini?")) {
+                $.ajax({
+                    url: '/user/' + user_id + '/delete_ajax',
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+
+                    success: function(response) {
+                        alert(response.message);
+                        if (response.status) {
+                            dataUser.ajax.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+
         var dataUser;
         $(document).ready(function() {
             dataUser = $('#table_user').DataTable({
@@ -87,13 +111,13 @@
                         searchable: true
                     },
                     {
-                        data: "nama",
+                        data: "name",
                         className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
-                        data: "level.level_nama", // data relasi dari model
+                        data: "level.level_name", // data relasi dari model
                         className: "",
                         orderable: false,
                         searchable: false

@@ -3,7 +3,7 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
+                <h5 class="modal-title">Tambah Data User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
@@ -13,24 +13,39 @@
                     <select name="level_id" id="level_id" class="form-control" required>
                         <option value="">- Pilih Level -</option>
                         @foreach ($level as $l)
-                            <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                            <option value="{{ $l->level_id }}">{{ $l->level_name }}</option>
                         @endforeach
                     </select>
                     <small id="error-level_id" class="error-text form-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
                     <label>Username</label>
-                    <input value="" type="text" name="username" id="username" class="form-control" required>
+                    <input type="text" name="username" id="username" class="form-control" required>
                     <small id="error-username" class="error-text form-text text-danger"></small>
                 </div>
+
                 <div class="form-group">
-                    <label>Nama</label>
-                    <input value="" type="text" name="nama" id="nama" class="form-control" required>
-                    <small id="error-nama" class="error-text form-text text-danger"></small>
+                    <label>Nama Lengkap</label>
+                    <input type="text" name="name" id="name" class="form-control" required>
+                    <small id="error-name" class="error-text form-text text-danger"></small>
                 </div>
+
+                <div class="form-group">
+                    <label>NIDN</label>
+                    <input type="text" name="nidn" id="nidn" class="form-control">
+                    <small id="error-nidn" class="error-text form-text text-danger"></small>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" id="email" class="form-control">
+                    <small id="error-email" class="error-text form-text text-danger"></small>
+                </div>
+
                 <div class="form-group">
                     <label>Password</label>
-                    <input value="" type="password" name="password" id="password" class="form- control" required>
+                    <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
             </div>
@@ -66,10 +81,17 @@
                     minlength: 3,
                     maxlength: 20
                 },
-                nama: {
+                name: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
+                },
+                nidn: {
+                    minlength: 5,
+                    maxlength: 30
+                },
+                email: {
+                    email: true
                 },
                 password: {
                     required: true,
@@ -115,10 +137,10 @@
                 error.addClass('invalid-feedback');
                 element.closest('.form-group').append(error);
             },
-            highlight: function(element, errorClass, validClass) {
+            highlight: function(element) {
                 $(element).addClass('is-invalid');
             },
-            unhighlight: function(element, errorClass, validClass) {
+            unhighlight: function(element) {
                 $(element).removeClass('is-invalid');
             }
         });

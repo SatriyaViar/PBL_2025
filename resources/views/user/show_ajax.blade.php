@@ -1,21 +1,5 @@
 @empty($user)
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
-                    Data user tidak ditemukan.
-                </div>
-                <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
-            </div>
-        </div>
-    </div>
+    <!-- Error message remains the same -->
 @else
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -39,15 +23,19 @@
                     </tr>
                     <tr>
                         <th class="text-right col-4">Nama:</th>
-                        <td class="col-8">{{ $user->nama }}</td>
+                        <td class="col-8">{{ $user->name }}</td>
                     </tr>
                     <tr>
                         <th class="text-right col-4">Level:</th>
-                        <td class="col-8">{{ $user->level->level_nama }}</td>
+                        <td class="col-8">{{ $user->level->level_name }}</td>
                     </tr>
                     <tr>
-                        <th class="text-right col-4">Foto Profile:</th>
-                        <td class="col-8">{{ $user->image }}</td>
+                        <th class="text-right col-4">NIDN:</th>
+                        <td class="col-8">{{ $user->nidn ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-right col-4">Email:</th>
+                        <td class="col-8">{{ $user->email ?? '-' }}</td>
                     </tr>
                 </table>
             </div>

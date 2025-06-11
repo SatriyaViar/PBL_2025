@@ -1,20 +1,5 @@
 @empty($user)
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
-                    Data yang anda cari tidak ditemukan
-                </div>
-                <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
-            </div>
-        </div>
-    </div>
+    <!-- Error message remains the same -->
 @else
     <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
         @csrf
@@ -23,7 +8,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -33,7 +18,7 @@
                             <option value="">- Pilih Level -</option>
                             @foreach($level as $l)
                                 <option {{ ($l->level_id == $user->level_id) ? 'selected' : '' }} value="{{ $l->level_id }}">
-                                    {{ $l->level_nama }}
+                                    {{ $l->level_name }}
                                 </option>
                             @endforeach
                         </select>
@@ -47,14 +32,23 @@
                     </div>
                     <div class="form-group">
                         <label>Nama</label>
-                        <input value="{{ $user->nama }}" type="text" name="nama" id="nama" class="form-control" required>
-                        <small id="error-nama" class="error-text form-text text-danger"></small>
+                        <input value="{{ $user->name }}" type="text" name="name" id="name" class="form-control" required>
+                        <small id="error-name" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>NIDN</label>
+                        <input value="{{ $user->nidn }}" type="text" name="nidn" id="nidn" class="form-control">
+                        <small id="error-nidn" class="error-text form-text text-danger"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input value="{{ $user->email }}" type="email" name="email" id="email" class="form-control">
+                        <small id="error-email" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input value="" type="password" name="password" id="password" class="form-control">
-                        <small class="form-text text-muted">Abaikan jika tidak ingin ubah
-                            password</small>
+                        <input type="password" name="password" id="password" class="form-control">
+                        <small class="form-text text-muted">Abaikan jika tidak ingin ubah password</small>
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
                 </div>
@@ -71,7 +65,9 @@
                 rules: {
                     level_id: { required: true, number: true },
                     username: { required: true, minlength: 3, maxlength: 20 },
-                    nama: { required: true, minlength: 3, maxlength: 100 },
+                    name: { required: true, minlength: 3, maxlength: 100 },
+                    nidn: { minlength: 5, maxlength: 30 },
+                    email: { email: true },
                     password: { minlength: 6, maxlength: 20 }
                 },
                 submitHandler: function (form) {

@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('name');
             $table->string('password');
-            $table->foreign('level_id')->references('level_id')->on('m_level');
             $table->timestamps();
+
+            $table->foreign('level_id')->references('level_id')->on('m_level');
         });
     }
 

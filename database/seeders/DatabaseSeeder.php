@@ -13,12 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Disable foreign key checks during seeding
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-        // Truncate tables to avoid duplicate issues
-        DB::table('m_user')->truncate();
-        DB::table('m_level')->truncate();
 
         // Seed in correct order
         $this->call([

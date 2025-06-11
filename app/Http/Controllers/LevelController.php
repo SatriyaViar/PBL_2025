@@ -27,7 +27,7 @@ class LevelController extends Controller
 
     public function list(Request $request)
     {
-        $levels = LevelModel::select('level_id', 'level_kode', 'level_nama');
+        $levels = LevelModel::select('level_id', 'level_code', 'level_name');
 
         // Filter data level berdasarkan level_id
         if ($request->level_id) {
@@ -38,12 +38,9 @@ class LevelController extends Controller
             // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex) 
             ->addIndexColumn()
             ->addColumn('aksi', function ($level) {  // menambahkan kolom aksi 
-                $btn  = '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
-                    '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
-                    '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .
-                    '/delete_ajax') . '\')"  class="btn btn-danger btn-sm">Hapus</button> ';
+                $btn  = '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .'/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .'/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn .= '<button onclick="modalAction(\'' . url('/level/' . $level->level_id .'/delete_ajax') . '\')"  class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html 
@@ -59,8 +56,8 @@ class LevelController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|min:3|unique:m_level,level_kode',
-                'level_nama' => 'required|string|max:100'
+                'level_code' => 'required|string|min:3|unique:m_level,level_code',
+                'level_name' => 'required|string|max:100'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -103,8 +100,8 @@ class LevelController extends Controller
         // cek apakah request dari ajax 
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'level_kode' => 'required|string|min:3|unique:m_level,level_kode,' . $id . ',level_id',
-                'level_nama' => 'required|string|max:100'
+                'level_code' => 'required|string|min:3|unique:m_level,level_code,' . $id . ',level_id',
+                'level_name' => 'required|string|max:100'
             ];
 
             // use Illuminate\Support\Facades\Validator; 

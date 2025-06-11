@@ -18,11 +18,11 @@ class DashboardController extends Controller
         ];
 
         $activeMenu = 'dashboard';
-        
+
         // Tambahkan data yang diperlukan
         $countdosen = 0; // Ganti dengan query database yang sesuai
         // Contoh: $countdosen = User::where('role', 'dosen')->count();
 
-        return view('dashboard.index', compact('breadcrumb', 'activeMenu', 'countdosen'));
+        return view('dashboard.index', compact('breadcrumb', 'activeMenu'));
     }
 }

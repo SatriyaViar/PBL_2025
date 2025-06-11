@@ -1,8 +1,11 @@
+@php
+    $activeMenu = $activeMenu ?? '';
+@endphp
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/dashboard') }}">
         <div class="sidebar-brand-icon">
             <img src="{{ asset('img/LogoJTI.png') }}" alt="Logo JTI" class="img-fluid" style="width: 70px; height: 40px;">
 
@@ -82,6 +85,52 @@
             </div>
         </div>
     </li>
+
+    {{-- <!-- Sidebar Penelitian - Untuk Koordinator/Admin -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianKoordinatorMenu"
+            aria-expanded="true" aria-controls="penelitianKoordinatorMenu">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Penelitian Dosen</span>
+        </a>
+        <div id="penelitianKoordinatorMenu" class="collapse" aria-labelledby="headingPenelitianKoordinator"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Koordinator:</h6>
+                <a class="collapse-item {{ $activeMenu == 'penelitian-koordinator' ? 'active' : '' }}"
+                    href="{{ route('penelitian-dosen-koordinator.index') }}">
+                    Daftar Penelitian
+                </a>
+            </div>
+        </div>
+    </li>
+
+
+    <!-- Sidebar Penelitian - Untuk Dosen -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianDosenMenu"
+            aria-expanded="true" aria-controls="penelitianDosenMenu">
+            <i class="fas fa-fw fa-lightbulb"></i>
+            <span>Penelitian Saya</span>
+        </a>
+        <div id="penelitianDosenMenu" class="collapse" aria-labelledby="headingPenelitianDosen"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Dosen:</h6>
+                <a class="collapse-item {{ $activeMenu == 'penelitian-dosen' ? 'active' : '' }}"
+                    href="{{ route('penelitian-dosen.index') }}">
+                    Daftar Penelitian Saya
+                </a>
+
+            </div>
+        </div>
+    </li> --}}
+
+
+
+
 
     <li class="nav-item">
         <a href="{{ route('logout') }}" class="nav-link text-danger"
