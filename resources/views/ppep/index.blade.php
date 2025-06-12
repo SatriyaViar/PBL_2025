@@ -71,7 +71,6 @@
     </div>
 
     @push('js')
-<<<<<<< HEAD
         <script>
             $(document).ready(function() {
                 $('.preview-btn').on('click', function(e) {
@@ -152,31 +151,4 @@
             });
         </script>
     @endpush
-=======
-    <script>
-        $(document).ready(function () {
-            $('.preview-btn').on('click', function (e) {
-                e.preventDefault();
-
-                const url = $(this).attr('href');
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (data) {
-                        $('#previewDokumenContent').html(data);
-                        $('#previewModal').modal('show');
-                    },
-                    error: function (xhr) {
-                        $('#previewDokumenContent').html(
-                            '<div class="alert alert-danger">Gagal memuat data dokumen.</div>');
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
-@endpush
-
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
 @endsection

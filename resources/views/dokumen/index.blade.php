@@ -22,7 +22,6 @@
                     <label for="description" class="form-label">Isi Dokumen</label>
                     <textarea name="description" id="summernote" class="form-control" placeholder="description" rows="10"></textarea>
                 </div>
-<<<<<<< HEAD
                 {{-- Pilihan tipe dokumen --}}
                 <div class="mb-3">
                     <div class="form-check form-check-inline">
@@ -31,26 +30,10 @@
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="tipe_dokumen[]" id="tipe_link" value="link">
-=======
-
-                {{-- Pilihan tipe dokumen --}}
-                <div class="mb-3">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="tipe_dokumen" id="tipe_file" value="file"
-                            checked>
-                        <label class="form-check-label" for="tipe_file">Upload File</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="tipe_dokumen" id="tipe_link" value="link">
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
                         <label class="form-check-label" for="tipe_link">Input Link</label>
                     </div>
                 </div>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
                 {{-- Input untuk file --}}
                 <div class="mb-3" id="input-file-group">
                     <label for="file_pendukung" class="form-label">File Pendukung</label>
@@ -79,7 +62,6 @@
             const linkGroup = document.getElementById('input-link-group');
 
             function toggleInput() {
-<<<<<<< HEAD
                 fileGroup.style.display = tipeFile.checked ? 'block' : 'none';
                 linkGroup.style.display = tipeLink.checked ? 'block' : 'none';
             }
@@ -89,26 +71,6 @@
             tipeLink.addEventListener('change', toggleInput);
             toggleInput(); // initial call
 
-=======
-                if (tipeFile && tipeFile.checked) {
-                    fileGroup.style.display = 'block';
-                    linkGroup.style.display = 'none';
-                    // Clear link input
-                    const linkInput = document.getElementById('link');
-                    if (linkInput) linkInput.value = '';
-                } else if (tipeLink && tipeLink.checked) {
-                    fileGroup.style.display = 'none';
-                    linkGroup.style.display = 'block';
-                    // Clear file input
-                    const fileInput = document.getElementById('file_pendukung');
-                    if (fileInput) fileInput.value = '';
-                }
-            }
-
-            // Add event listeners if elements exist
-            if (tipeFile) tipeFile.addEventListener('change', toggleInput);
-            if (tipeLink) tipeLink.addEventListener('change', toggleInput);
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
 
             toggleInput(); // inisialisasi saat halaman load
 
@@ -200,17 +162,12 @@
                                     title: 'Berhasil',
                                     text: response.message || 'Data berhasil disimpan'
                                 }).then(() => {
-<<<<<<< HEAD
                                     if (response.redirect) {
                                         window.location.href = response.redirect;
                                     } else {
                                         // Fallback jika redirect tidak dikembalikan
                                         window.location.reload();
                                     }
-=======
-                                    // Reset form
-                                    form.reset();
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
 
                                     // Reset Summernote
                                     if (typeof $ !== 'undefined' && $.fn.summernote) {
@@ -329,11 +286,7 @@
                         } else {
                             // Create error element if not exists
                             fieldElement.after(
-<<<<<<< HEAD
                                 `<div class="invalid-feedback">${messages.join(', ')}</div>`);
-=======
-                            `<div class="invalid-feedback">${messages.join(', ')}</div>`);
->>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
                         }
                     }
                 });
