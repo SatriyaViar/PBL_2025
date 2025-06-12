@@ -55,7 +55,7 @@ class PenelitianDosenController extends Controller
                     ->make(true);
             } catch (\Exception $e) {
                 Log::error("Error DataTables Penelitian Dosen: " . $e->getMessage());
-                return response()->json(['message' => 'Terjadi kesalahan pada server.'], 500);
+                return response()->json(['message' => 'An error occurred on the server.'], 500);
             }
         }
     }
@@ -67,12 +67,12 @@ class PenelitianDosenController extends Controller
     public function index()
     {
         $breadcrumb = (object)[
-            'title' => 'Daftar Penelitian Dosen',
+            'title' => 'List of Lecturer Research',
             'list' => ['Home', 'Penelitian Dosen']
         ];
 
         $page = (object)[
-            'title' => 'Daftar penelitian dosen yang terdaftar dalam sistem'
+            'title' => 'List of lecturer research in the system'
         ];
 
         return view('penelitian-dosen.dosen.index', compact('breadcrumb', 'page'));
@@ -94,7 +94,7 @@ class PenelitianDosenController extends Controller
         Log::info('Store function called with data:', $request->all());
 
         if (!$request->ajax() && !$request->wantsJson()) {
-            return redirect('/dashboard'); // ← jangan lupa pakai return
+            return redirect('/dashboard'); 
         }
 
         $validator = Validator::make($request->all(), [
@@ -107,7 +107,7 @@ class PenelitianDosenController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Validasi Gagal',
+                'message' => 'Validation failed!',
                 'msgField' => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -129,7 +129,7 @@ class PenelitianDosenController extends Controller
             if (!$dosenId) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Validasi Gagal',
+                    'message' => 'Validation failed!',
                     'msgField' => $validator->errors()
                 ], Response::HTTP_BAD_REQUEST);
             }
@@ -145,17 +145,17 @@ class PenelitianDosenController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Penelitian berhasil disimpan'
+                'message' => 'Research successfully saved!'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            Log::error("Gagal menyimpan penelitian: " . $e->getMessage(), [
+            Log::error("Failed to save research: " . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
 
             return response()->json([
-                'message' => 'Terjadi kesalahan saat menyimpan data.'
+                'message' => 'An error occurred while saving data.'
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -183,7 +183,7 @@ class PenelitianDosenController extends Controller
 
         if (!$penelitianDosen) {
             return response()->json([
-                'message' => 'Data penelitian dosen tidak ditemukan.'
+                'message' => 'No research data from lecturers was found.'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -192,7 +192,7 @@ class PenelitianDosenController extends Controller
         $penelitianDosen->save();
 
         return response()->json([
-            'message' => 'Status penelitian dosen berhasil diubah.'
+            'message' => 'The status of the lecturer research has been successfully changed!'
         ], Response::HTTP_OK);
     }
 
@@ -224,7 +224,7 @@ class PenelitianDosenController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi Gagal',
+                'message' => 'Validation failed!',
                 'msgField' => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -234,7 +234,7 @@ class PenelitianDosenController extends Controller
         if (!$penelitianDosen) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data penelitian dosen tidak ditemukan.'
+                'message' => 'No research data from lecturers was found.'
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -253,7 +253,7 @@ class PenelitianDosenController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Data penelitian dan dosen berhasil diupdate'
+            'message' => 'The lecturers research data has been successfully updated!'
         ], Response::HTTP_OK);
     }
 
@@ -274,7 +274,7 @@ class PenelitianDosenController extends Controller
             // dd($penelitianDosen);
             if (!$penelitianDosen) {
                 return response()->json([
-                    'message' => 'Data tidak ditemukan'
+                    'message' => 'Data not found!'
                 ], Response::HTTP_NOT_FOUND);
             }
 
@@ -296,13 +296,13 @@ class PenelitianDosenController extends Controller
                 Log::info("LecturerResearchModel ID $id berhasil dihapus.");
 
                 return response()->json([
-                    'message' => 'Data berhasil dihapus!'
+                    'message' => 'Data successfully deleted!'
                 ], Response::HTTP_OK);
             } catch (\Exception $e) {
                 Log::error("Gagal menghapus LecturerResearchModel ID $id: " . $e->getMessage());
 
                 return response()->json([
-                    'message' => 'Terjadi kesalahan saat menghapus data.'
+                    'message' => 'An error occurred while deleting data.'
                 ], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
