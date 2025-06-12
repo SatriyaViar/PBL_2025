@@ -22,30 +22,34 @@ class PenelitianDosenController extends Controller
                 $user = auth()->user()->user_id;
 
                 $data = LecturerResearchModel::with('dosen', 'penelitian')
-                    ->where('user_id', $user)
-                    ->select('id_penelitian_dosen', 'id_penelitian', 'id_dosen', 'status');
+                    ->where('user_id', $user);
 
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
                         $id = $row->id_penelitian_dosen;
+                        $editUrl = route('penelitian-dosen.edit', $id);
+                        $confirmUrl = route('penelitian-dosen.confirm', $id);
+                        $detailUrl = url("penelitian-dosen/dosen/" . $id);
+
                         $btn = '
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-info" title="Detail"
-                                onclick="modalAction(\'' . url("penelitian-dosen/dosen/" . $id) . '\')">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-warning" title="Edit"
-                                onclick="modalAction(\'' . url("penelitian-dosen/dosen/" . $id . "/edit") . '\')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" title="Hapus"
-                                onclick="deletePenelitian(' . $id . ')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>';
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-info" title="Detail"
+                                        onclick="modalAction(\'' . $detailUrl . '\')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" title="Edit"
+                                        onclick="modalAction(\'' . $editUrl . '\')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                        onclick="modalAction(\'' . $confirmUrl . '\')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>';
                         return $btn;
                     })
+
                     ->rawColumns(['action'])
                     ->make(true);
             } catch (\Exception $e) {
@@ -89,7 +93,7 @@ class PenelitianDosenController extends Controller
         Log::info('Store function called with data:', $request->all());
 
         if (!$request->ajax() && !$request->wantsJson()) {
-            return redirect('/dashboard'); // ← jangan lupa pakai `return`
+            return redirect('/dashboard'); // ← jangan lupa pakai return
         }
 
         $validator = Validator::make($request->all(), [
@@ -123,8 +127,10 @@ class PenelitianDosenController extends Controller
 
             if (!$dosenId) {
                 return response()->json([
-                    'message' => 'Gagal mengambil data dosen dari user yang login'
-                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             // Simpan relasi dosen ke penelitian
@@ -137,6 +143,7 @@ class PenelitianDosenController extends Controller
             Log::info('Penelitian created: ', $penelitian->toArray());
 
             return response()->json([
+                'status' => true,
                 'message' => 'Penelitian berhasil disimpan'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
@@ -193,8 +200,9 @@ class PenelitianDosenController extends Controller
      */
     public function edit(string $id)
     {
-        $penelitianDosen = LecturerResearchModel::with('penelitian') // Dengan relasi
-            ->where('id_penelitian_dosen', $id) // Mengambil berdasarkan penelitian_id
+        Log::info("Memuat edit untuk ID: " . $id);
+        $penelitianDosen = LecturerResearchModel::with('penelitian')
+            ->where('id_penelitian_dosen', $id)
             ->firstOrFail();
         return view('penelitian-dosen.dosen.edit', compact('penelitianDosen'));
     }
@@ -204,7 +212,6 @@ class PenelitianDosenController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // Validasi data yang dikirimkan
         $validator = Validator::make($request->all(), [
             'no_surat_tugas' => 'required',
             'judul_penelitian' => 'required',
@@ -215,36 +222,23 @@ class PenelitianDosenController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
+                'status' => false,
                 'message' => 'Validasi Gagal',
                 'msgField' => $validator->errors()
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // Cari data t_penelitian_dosen berdasarkan id
-        $penelitianDosen = LecturerResearchModel::findOrFail($id);
+        $penelitianDosen = LecturerResearchModel::find($id);
 
         if (!$penelitianDosen) {
             return response()->json([
+                'status' => false,
                 'message' => 'Data penelitian dosen tidak ditemukan.'
             ], Response::HTTP_NOT_FOUND);
         }
 
-        // if ($penelitianDosen->status == 'accepted') {
-        //     return response()->json([
-        //         'message' => 'Penelitian Sudah di Setujui oleh Dosen tidak bisa update'
-        //     ], Response::HTTP_BAD_REQUEST);
-        // }
-
-        // if ($penelitianDosen->status == 'rejected') {
-        //     return response()->json([
-        //         'message' => 'Penelitian Sudah di Tolak oleh Dosen tidak bisa update'
-        //     ], Response::HTTP_BAD_REQUEST);
-        // }
-
-        // Cari data penelitian terkait
         $penelitian = $penelitianDosen->penelitian;
 
-        // Update data penelitian jika perlu
         $penelitian->update([
             'no_surat_tugas' => $request->no_surat_tugas ?? $penelitian->no_surat_tugas,
             'judul_penelitian' => $request->judul_penelitian ?? $penelitian->judul_penelitian,
@@ -252,16 +246,16 @@ class PenelitianDosenController extends Controller
             'pendanaan_eksternal' => $request->pendanaan_eksternal ?? $penelitian->pendanaan_eksternal,
         ]);
 
-
-        // Update status penelitian
         $penelitianDosen->update([
             'status' => $request->status,
         ]);
 
         return response()->json([
+            'status' => true,
             'message' => 'Data penelitian dan dosen berhasil diupdate'
         ], Response::HTTP_OK);
     }
+
 
     public function confirm(string $id)
     {
