@@ -142,9 +142,40 @@ class DokumenController extends Controller
         }
     }
     public function preview($kriteria_nama, $jenis_list)
-    {   
-        $dokumen = DokumenPelaksanaanModel::where('kriteria_id', $kriteria_nama)->get();
+    {
+        // Ambil data kriteria berdasarkan nama
+        $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
 
-        return view('dokumen.preview', compact('dokumen'));
+        if (!$kriteria) {
+            abort(404, 'Kriteria tidak ditemukan');
+        }
+
+        switch (strtolower($jenis_list)) {
+            // case 'a':
+            // $dokumen = DokumenPenetapan::where('kriteria', $kriteria)->get();
+            // $label = 'Penetapan';
+            // break;
+            case 'b':
+                // Ambil dokumen berdasarkan kriteria_id
+                $dokumen = DokumenPelaksanaanModel::where('kriteria_id', $kriteria->kriteria_id)->get();
+                $label = 'Pelaksanaan';
+                break;
+            case 'c':
+                // $dokumen = DokumenEvaluasi::where('kriteria', $kriteria)->get();
+                // $label = 'Evaluasi';
+                // break;
+                // case 'd':
+                //     $dokumen = DokumenPengendalian::where('kriteria', $kriteria)->get();
+                //     $label = 'Pengendalian';
+                //     break;
+                // case 'e':
+                //     $dokumen = DokumenPeningkatan::where('kriteria', $kriteria)->get();
+                //     $label = 'Peningkatan';
+                //     break;
+            default:
+                abort(404, 'Jenis dokumen tidak ditemukan');
+        }
+
+        return view('dokumen._preview', compact('dokumen', 'label'));
     }
 }

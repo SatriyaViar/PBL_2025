@@ -33,13 +33,11 @@
                                         class="btn btn-{{ $jenis['color'] }} btn-sm btn-block">
                                         <i class="fas fa-plus"></i> Tambah Dokumen
                                     </a>
-                                    <button class="btn btn-{{ $jenis['color'] }} btn-sm btn-block preview-btn"
-                                        data-toggle="modal" data-target="#previewModal"
-                                        data-kriteria="{{ $kriteria_nama }}" data-jenis="{{ $jenis_kode }}"
-                                        data-title="{{ $jenis['title'] }}">
-                                        <i class="fas fa-eye"></i> Preview Dokumen
-                                    </button>
-
+                                    <a href="{{ url('/dokumen/' . $kriteria_nama . '/' . $jenis_kode . '/preview') }}"
+                                        class="btn btn-info btn-sm btn-block preview-btn"
+                                        data-kriteria_nama="{{ $kriteria_nama }}" data-jenis_list="{{ $jenis_kode }}">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </a>
                                 </div>
 
                             </div>
@@ -72,30 +70,30 @@
         </div>
     </div>
 
+    @push('js')
+    <script>
+        $(document).ready(function () {
+            $('.preview-btn').on('click', function (e) {
+                e.preventDefault();
 
-    @push('scripts')
-        <script>
-            $('.preview-btn').on('click', function() {
-                const kriteria = $(this).data('kriteria');
-                const jenis = $(this).data('jenis');
-                const title = $(this).data('title');
-
-                $('#previewModalLabel').text(`Preview Dokumen - ${title}`);
-                $('#previewDokumenContent').html('<p class="text-muted">Memuat dokumen...</p>');
+                const url = $(this).attr('href');
 
                 $.ajax({
-                    url: `/dokumen/preview/${kriteria}/${jenis}`,
+                    url: url,
                     type: 'GET',
-                    success: function(data) {
+                    success: function (data) {
                         $('#previewDokumenContent').html(data);
+                        $('#previewModal').modal('show');
                     },
-                    error: function() {
+                    error: function (xhr) {
                         $('#previewDokumenContent').html(
                             '<div class="alert alert-danger">Gagal memuat data dokumen.</div>');
+                        console.error(xhr.responseText);
                     }
                 });
             });
-        </script>
-    @endpush
+        });
+    </script>
+@endpush
 
 @endsection

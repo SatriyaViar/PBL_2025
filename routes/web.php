@@ -99,9 +99,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
         Route::get('/{kriteria}/{jenis_list}/list', [DokumenController::class, 'list']);
-        Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'preview']);
+        Route::get('/{kriteria}/{jenis_list}/preview', [DokumenController::class, 'preview']);
 
     });
 
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
+    Route::get('/ppep/{id}/preview', [DokumenController::class, 'preview']);
 });
