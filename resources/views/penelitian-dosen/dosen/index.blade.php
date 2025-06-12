@@ -72,7 +72,7 @@
         });
 
         $(document).ready(function() {
-            $('#table-penelitian').DataTable({
+            $('#table_master').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -89,8 +89,9 @@
                         searchable: false
                     },
                     {
-                        data: 'dosen.nama_dosen',
-                        name: 'dosen.nama_dosen'
+                        data: 'dosen.name',
+                        className: '',
+                        defaultContent: '-',
                     },
                     {
                         data: 'penelitian.judul_penelitian',
