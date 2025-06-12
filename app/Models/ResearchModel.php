@@ -21,7 +21,7 @@ class ResearchModel extends Model
         'link_penelitian',
     ];
 
-    public function research()
+    public function penelitian()
     {
         return $this->hasMany(LecturerResearchModel::class, 'penelitian_id');
     }
