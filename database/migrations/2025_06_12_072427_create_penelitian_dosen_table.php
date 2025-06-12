@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('user_id')->on('m_user');
             $table->unsignedBigInteger('penelitian_id')->index();
             $table->foreign('penelitian_id')->references('id_penelitian')->on('m_penelitian');
-            $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }
