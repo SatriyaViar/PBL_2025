@@ -6,37 +6,37 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Edit Penelitian</h5>
+                <h5 class="modal-title">Edit Research Data</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label>No Surat Tugas</label>
+                    <label>Letter Number</label>
                     <input type="text" name="no_surat_tugas" class="form-control"
                         value="{{ $penelitianDosen->penelitian->no_surat_tugas }}">
                     <small class="text-danger" id="error-no_surat_tugas"></small>
                 </div>
                 <div class="form-group">
-                    <label>Judul Penelitian</label>
+                    <label>Research Title</label>
                     <input type="text" name="judul_penelitian" class="form-control"
                         value="{{ $penelitianDosen->penelitian->judul_penelitian }}">
                     <small class="text-danger" id="error-judul_penelitian"></small>
                 </div>
                 <div class="form-group">
-                    <label>Pendanaan Internal</label>
+                    <label>Internal Funding</label>
                     <input type="text" name="pendanaan_internal" class="form-control"
                         value="{{ $penelitianDosen->penelitian->pendanaan_internal }}">
                     <small class="text-danger" id="error-pendanaan_internal"></small>
                 </div>
                 <div class="form-group">
-                    <label>Pendanaan Eksternal</label>
+                    <label>External Funding</label>
                     <input type="text" name="pendanaan_eksternal" class="form-control"
                         value="{{ $penelitianDosen->penelitian->pendanaan_eksternal }}">
                     <small class="text-danger" id="error-pendanaan_eksternal"></small>
                 </div>
                 <div class="form-group">
-                    <label>Link Penelitian</label>
+                    <label>Research Link</label>
                     <input type="text" name="link_penelitian" class="form-control"
                         value="{{ $penelitianDosen->penelitian->link_penelitian }}">
                     <small class="text-danger" id="error-link_penelitian"></small>
@@ -44,16 +44,16 @@
                 <div class="form-group">
                     <label>Status</label>
                     <select name="status" class="form-control">
-                        <option value="accepted" {{ $penelitianDosen->status == 'accepted' ? 'selected' : '' }}>Diterima</option>
-                        <option value="rejected" {{ $penelitianDosen->status == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                        <option value="accepted" {{ $penelitianDosen->status == 'accepted' ? 'selected' : '' }}>Verified</option>
+                        <option value="rejected" {{ $penelitianDosen->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                     </select>
                     <small class="text-danger" id="error-status"></small>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
 
         </div>
@@ -73,7 +73,7 @@
             },
             messages: {
                 link_penelitian: {
-                    url: "Format link tidak valid"
+                    url: "Invalid link format!"
                 }
             },
             submitHandler: function (form) {
@@ -90,7 +90,7 @@
                             $('#myModal').modal('hide');
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Berhasil',
+                                title: 'Successful',
                                 text: response.message
                             });
                             $('#table_master').DataTable().ajax.reload();
@@ -101,8 +101,8 @@
                             });
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message || 'Gagal mengupdate data'
+                                title: 'An error has occurred',
+                                text: response.message || 'Failed to update data!'
                             });
                         }
                     },
@@ -115,8 +115,8 @@
                         }
                         Swal.fire({
                             icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: 'Gagal mengupdate data'
+                            title: 'An error has occurred',
+                            text: 'Failed to update data!'
                         });
                     }
                 });
