@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('penelitian-dosen', PenelitianDosenController::class);
     Route::post('penelitian-dosen/list/data', [PenelitianDosenController::class, 'list'])->name('penelitian-dosen.list');
     Route::put('penelitian-dosen/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian-dosen.status');
-    Route::get('penelitian-dosen/{id}/delete', [PenelitianDosenController::class, 'confirm']);
+    Route::get('penelitian-dosen/{id}/confirm', [PenelitianDosenController::class, 'confirm'])->name('penelitian-dosen.confirm');
 
     // Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
     // Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
