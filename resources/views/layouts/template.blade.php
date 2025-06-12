@@ -16,9 +16,6 @@
     <link rel="stylesheet" href="{{ asset('/boostraap/vendor/datatables/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
 
-    <link rel="stylesheet" href="{{ asset('sm/summernote-bs4.min.css') }}">
-
-
     @stack('css')
 </head>
 
@@ -49,7 +46,6 @@
     <!-- Plugin tambahan -->
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-    <script src="{{ asset('sm/summernote-bs4.min.js') }}"></script>
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
@@ -71,13 +67,9 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
-        $('#summernote').summernote({
-            placeholder: 'Hello Bootstrap 5',
-            tabsize: 2,
-            height: 200
-        });
     </script>
+
+    @yield('scripts')
 
     @stack('js')
 </body>

@@ -1,17 +1,15 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\PPEPController;
-use App\Http\Controllers\SidebarController;
+use App\Http\Controllers\PenelitianDosenController;
+use App\Http\Controllers\TPenelitianDosenKoordinatorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerifikasiController;
 use Illuminate\Support\Facades\Route;
-
-/*
+/*use App
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -22,25 +20,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::pattern('id', '[0-9]+');
-Route::get('/', [DashboardController::class, 'index']);
+// Route::pattern('id', '[0-9]+');
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
 
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin']);
-Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+// Auth Routes
+Route::get('/login', [AuthController::class, 'viewLogin'])->name('login.view');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// routes/web.php
-Route::get('/sidebar/kriteria', function () {
-    $kriteria = \App\Models\KriteriaModel::all();
-    return view('partials.ppep_sidebar', compact('kriteria'));
-});
+// Redirect root ke dashboard jika sudah login
+// Route::get('/home', function () {
+//     return redirect()->route('dashboard');
+// });
 
-
-
+// Route::get('/', function () {
+//     if (auth()->check()) {
+//         return redirect()->route('dashboard');
+//     }
+//     return view('landing');
+// })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-
-    Route::get('/sidebar', [SidebarController::class, 'refreshSidebar']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -78,26 +81,17 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [LevelController::class, 'destroy']);
     });
 
-    Route::group(['prefix' => 'kriteria'], function () {
-        Route::get('/', [KriteriaController::class, 'index']);
-        Route::post('/list', [KriteriaController::class, 'list']);
-        Route::get('/create', [KriteriaController::class, 'create']);
-        Route::post('/', [KriteriaController::class, 'store']);
-        Route::get('/create_ajax', [KriteriaController::class, 'create_ajax']); // Menampilkan halaman form tambah user Ajax
-        Route::post('/ajax', [KriteriaController::class, 'store_ajax']);    // Menyimpan data user baru Ajax
-        Route::get('/{id}', [KriteriaController::class, 'show']);
-        Route::get('/{id}/edit', [KriteriaController::class, 'edit']);
-        Route::put('/{id}', [KriteriaController::class, 'update']);
-        Route::get('/{id}/edit_ajax', [KriteriaController::class, 'edit_ajax']); //Menampilkan Halaman form Edit User AJAX
-        Route::put('/{id}/update_ajax', [KriteriaController::class, 'update_ajax']); //Menyimpan perubahan data User AJAX
-        Route::get('/{id}/delete_ajax', [KriteriaController::class, 'confirm_ajax']);
-        Route::get('/{id}/show_ajax', [KriteriaController::class, 'show_ajax']);
-        Route::delete('/{id}/delete_ajax', [KriteriaController::class, 'delete_ajax']);
-        Route::delete('/{id}', [KriteriaController::class, 'destroy']);
+    Route::resource('penelitian', PenelitianDosenController::class);
+    Route::post('penelitian/list/data', [PenelitianDosenController::class, 'list'])->name('penelitian.list');
+    //statusPenelitian
+    Route::put('penelitian/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian.status');
+    Route::get('penelitian/{id}/delete', [PenelitianDosenController::class, 'confirm']);
+
+    // Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
+    // Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
+    // Route::get('penelitian-koordinator/{id}/delete', [TPenelitianDosenKoordinatorController::class, 'confirm']);
+
+    Route::group(['prefix' => 'verifikasi'], function () {
+        Route::get('/', [VerifikasiController::class, 'index'])->name('verifikasi.index');
     });
-    Route::prefix('/dokumen/{kriteria_nama}/{jenis_list}')->group(function () {
-        Route::get('/', [DokumenController::class, 'index']);
-        Route::post('/store', [DokumenController::class, 'store']);
-    });
-    Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
 });

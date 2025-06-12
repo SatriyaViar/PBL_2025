@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\KriteriaModel;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,10 +18,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(): void
     {
-        View::composer('layouts.sidebar', function ($view) {
-            $view->with('kriteriaList', KriteriaModel::all());
-        });
+        Schema::defaultStringLength(191);
     }
 }

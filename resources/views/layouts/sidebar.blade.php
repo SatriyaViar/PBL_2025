@@ -1,8 +1,11 @@
+@php
+    $activeMenu = $activeMenu ?? '';
+@endphp
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/') }}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url('/dashboard') }}">
         <div class="sidebar-brand-icon">
             <img src="{{ asset('img/LogoJTI.png') }}" alt="Logo JTI" class="img-fluid" style="width: 70px; height: 40px;">
 
@@ -38,7 +41,7 @@
                 <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}" href="{{ asset('/user') }}">User
                     Akreditasi</a>
                 <a class="collapse-item {{ $activeMenu == 'level' ? 'active' : '' }}" href="{{ asset('/level') }}">Level
-                    User Akreditasi</a>
+                    User Accreditation</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
@@ -75,13 +78,119 @@
         <div id="kriteriaAkreditasiPPEP" class="collapse" aria-labelledby="headingPages"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Kriteria Akreditasi:</h6>
                 <div id="ppep-sidebar-container">
-                    @include('partials.sidebar_kriteria', ['kriteriaList' => $kriteriaList])
+                    <!-- Data akan dimuat via JS -->
                 </div>
                 <div class="collapse-divider"></div>
             </div>
         </div>
     </li>
+
+    <!-- Sidebar Penelitian - Untuk Koordinator/Admin -->
+{{-- 
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianKoordinatorMenu"
+            aria-expanded="true" aria-controls="penelitianKoordinatorMenu">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Penelitian Dosen</span>
+        </a>
+        <div id="penelitianKoordinatorMenu" class="collapse" aria-labelledby="headingPenelitianKoordinator"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Koordinator:</h6>
+                <a class="collapse-item {{ $activeMenu == 'penelitian-koordinator' ? 'active' : '' }}"
+                    href="{{ route('penelitian-koordinator.index') }}">
+                    Daftar Penelitian
+                </a>
+            </div>
+        </div>
+    </li> --}}
+
+
+    <!-- Sidebar Penelitian - Untuk Dosen -->
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianDosenMenu"
+            aria-expanded="true" aria-controls="penelitianDosenMenu">
+            <i class="fas fa-fw fa-lightbulb"></i>
+            <span>Penelitian</span>
+        </a>
+        <div id="penelitianDosenMenu" class="collapse" aria-labelledby="headingPenelitianDosen"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Dosen:</h6>
+                <a class="collapse-item {{ $activeMenu == 'penelitian' ? 'active' : '' }}"
+                    href="{{ route('penelitian.index') }}">
+                    Daftar Penelitian
+                </a>
+
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#verifikasiDokumen"
+            aria-expanded="true" aria-controls="verifikasiDokumen">
+            <i class="fas fa-fw fa-clipboard-list"></i>
+            <span>Verifikasi</span>
+        </a>
+        <div id="verifikasiDokumen" class="collapse" aria-labelledby="headingVerifikasiDokumen"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Direktur:</h6>
+                <a class="collapse-item {{ request()->segment(1) == 'verifikasi' ? 'active' : null }}"
+                    href="{{ route('verifikasi.index') }}">
+                    Verifikasi Dokumen
+                </a>
+
+            </div>
+        </div>
+    </li>
+
+
+
+
+
+    <li class="nav-item">
+        <a href="{{ route('logout') }}" class="nav-link text-danger"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>Logout</p>
+        </a>
+    </li>
+
 </ul>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
+<script>
+    function loadSidebarKriteria() {
+        fetch('/sidebar/kriteria-ppep')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('ppep-sidebar-container');
+
+                // Bersihkan dulu isi sebelumnya
+                container.innerHTML = '<h6 class="collapse-header">Kriteria Akreditasi:</h6>';
+
+                // Tambahkan link dari data
+                data.forEach(item => {
+                    const link = document.createElement('a');
+                    link.className = 'collapse-item';
+                    link.href = '/ppep/' + item.kriteria_id; // atur link sesuai kebutuhanmu
+                    link.textContent = item.kriteria_nama;
+                    container.appendChild(link);
+                });
+
+                const divider = document.createElement('div');
+                divider.className = 'collapse-divider';
+                container.appendChild(divider);
+            });
+    }
+
+    // document.addEventListener('DOMContentLoaded', loadSidebarKriteria);
+</script>
+
 <!-- End of Sidebar -->
