@@ -38,9 +38,9 @@
                     success: function(response) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Berhasil',
+                            title: 'Successful',
                             text: response.message ||
-                                'Data penelitian dan dosen berhasil dihapus',
+                                'Research data and lecturers successfully deleted!',
                             confirmButtonColor: '#6c5ce7',
                             confirmButtonText: 'OK'
                         });
@@ -51,9 +51,9 @@
                     error: function(xhr) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Gagal',
+                            title: 'Failed',
                             text: xhr.responseJSON?.message ||
-                                'Terjadi kesalahan saat menghapus data.'
+                                'An error occurred while deleting data!'
                         });
                     }
                 });
