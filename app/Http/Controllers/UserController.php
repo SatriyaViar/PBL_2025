@@ -14,7 +14,7 @@ class UserController extends Controller
     function index()
     {
         $breadcrumb = (object)[
-            'title' => 'Daftar User',
+            'title' => 'List of User',
             'list'  => ['Home', 'User']
         ];
 

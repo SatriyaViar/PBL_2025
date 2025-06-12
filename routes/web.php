@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\TPenelitianDosenController;
+use App\Http\Controllers\PenelitianDosenController;
 use App\Http\Controllers\TPenelitianDosenKoordinatorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -80,14 +80,14 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [LevelController::class, 'destroy']);
     });
 
-    // Route::resource('penelitian-dosen', TPenelitianDosenController::class);
-    // Route::post('penelitian-dosen/list/data', [TPenelitianDosenController::class, 'list'])->name('penelitian-dosen.list');
-    // //statusPenelitian
-    // Route::put('penelitian-dosen/{id}/status', [TPenelitianDosenController::class, 'statusPenelitian'])->name('penelitian-dosen.status');
-    // Route::get('penelitian-dosen/{id}/delete', [TPenelitianDosenController::class, 'confirm']);
+    Route::resource('penelitian', PenelitianDosenController::class);
+    Route::post('penelitian/list/data', [PenelitianDosenController::class, 'list'])->name('penelitian.list');
+    //statusPenelitian
+    Route::put('penelitian/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian.status');
+    Route::get('penelitian/{id}/delete', [PenelitianDosenController::class, 'confirm']);
 
-    // Route::resource('penelitian-dosen-koordinator', TPenelitianDosenKoordinatorController::class);
-    // Route::post('penelitian-dosen-koordinator/list/data', [TPenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-dosen-koordinator.list');
-    // Route::get('penelitian-dosen-koordinator/{id}/delete', [TPenelitianDosenKoordinatorController::class, 'confirm']);
+    // Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
+    // Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
+    // Route::get('penelitian-koordinator/{id}/delete', [TPenelitianDosenKoordinatorController::class, 'confirm']);
 
 });

@@ -10,8 +10,8 @@ class LecturerResearchModel extends Model
 {
     use HasFactory;
 
-    protected $table = 't_lecturer_research';
-    protected $primaryKey = 'lecturer_research_id';
+    protected $table = 't_penelitian_dosen';
+    protected $primaryKey = 'id_penelitian_dosen';
 
     protected $fillable = [
         'user_id',
@@ -26,6 +26,6 @@ class LecturerResearchModel extends Model
 
     public function research()
     {
-        return $this->hasMany(ResearchModel::class, 'research_id');
+        return $this->hasMany(ResearchModel::class, 'penelitian_id');
     }
 }

@@ -5,8 +5,7 @@
         <div class="card-header">
             <h4 class="card-title bold">{{ $page->title }}</h4>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
-                    User</button>
+                <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Add New User</button>
             </div>
         </div>
         <div class="card-body">
@@ -39,7 +38,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
-                        <th>Nama</th>
+                        <th>Name</th>
                         <th>User Level</th>
                         <th>Action</th>
                     </tr>
