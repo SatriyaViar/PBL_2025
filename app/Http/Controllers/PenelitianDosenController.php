@@ -30,25 +30,26 @@ class PenelitianDosenController extends Controller
                         $id = $row->id_penelitian_dosen;
                         $editUrl = route('penelitian-dosen.edit', $id);
                         $confirmUrl = route('penelitian-dosen.confirm', $id);
-                        $detailUrl = url("penelitian-dosen/dosen/" . $id);
+                        $detailUrl = route('penelitian-dosen.show', $id); // pastikan rute ini ada
 
                         $btn = '
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-info" title="Detail"
-                                        onclick="modalAction(\'' . $detailUrl . '\')">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-warning" title="Edit"
-                                        onclick="modalAction(\'' . $editUrl . '\')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" title="Hapus"
-                                        onclick="modalAction(\'' . $confirmUrl . '\')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>';
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-sm btn-info" title="Detail"
+                                    onclick="modalAction(\'' . $detailUrl . '\')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-warning" title="Edit"
+                                    onclick="modalAction(\'' . $editUrl . '\')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                    onclick="modalAction(\'' . $confirmUrl . '\')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>';
                         return $btn;
                     })
+
 
                     ->rawColumns(['action'])
                     ->make(true);
