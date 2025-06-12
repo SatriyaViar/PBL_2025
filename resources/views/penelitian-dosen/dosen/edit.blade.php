@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label>Status</label>
                     <select name="status" class="form-control">
-                        <option value="accepted" {{ $penelitianDosen->status == 'accepted' ? 'selected' : '' }}>Verified</option>
+                        <option value="accepted" {{ $penelitianDosen->status == 'accepted' ? 'selected' : '' }}>Accepted</option>
                         <option value="rejected" {{ $penelitianDosen->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                     </select>
                     <small class="text-danger" id="error-status"></small>
