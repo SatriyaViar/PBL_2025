@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\ResearchModel;
 use App\Models\LecturerResearchModel;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
