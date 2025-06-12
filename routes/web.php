@@ -80,11 +80,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [LevelController::class, 'destroy']);
     });
 
-    Route::resource('penelitian', PenelitianDosenController::class);
-    Route::post('penelitian/list/data', [PenelitianDosenController::class, 'list'])->name('penelitian.list');
-    //statusPenelitian
-    Route::put('penelitian/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian.status');
-    Route::get('penelitian/{id}/delete', [PenelitianDosenController::class, 'confirm']);
+    Route::resource('penelitian-dosen', PenelitianDosenController::class);
+    Route::post('penelitian-dosen/list/data', [PenelitianDosenController::class, 'list'])->name('penelitian-dosen.list');
+    Route::put('penelitian-dosen/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian-dosen.status');
+    Route::get('penelitian-dosen/{id}/delete', [PenelitianDosenController::class, 'confirm']);
 
     // Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
     // Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
