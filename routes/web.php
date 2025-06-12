@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenelitianDosenController;
-use App\Http\Controllers\TPenelitianDosenKoordinatorController;
+use App\Http\Controllers\PenelitianDosenKoordinatorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 /*use App
@@ -85,8 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('penelitian-dosen/{id}/status', [PenelitianDosenController::class, 'statusPenelitian'])->name('penelitian-dosen.status');
     Route::get('penelitian-dosen/{id}/confirm', [PenelitianDosenController::class, 'confirm'])->name('penelitian-dosen.confirm');
 
-    // Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
-    // Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
-    // Route::get('penelitian-koordinator/{id}/delete', [TPenelitianDosenKoordinatorController::class, 'confirm']);
+    Route::resource('penelitian-koordinator', PenelitianDosenKoordinatorController::class);
+    Route::post('penelitian-koordinator/list/data', [PenelitianDosenKoordinatorController::class, 'list'])->name('penelitian-koordinator.list');
+    Route::get('penelitian-koordinator/{id}/delete', [PenelitianDosenKoordinatorController::class, 'confirm']);
 
 });
