@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="container-fluid">
-        <h1 class="h3 mb-2 text-gray-800">{{ $page->title ?? 'Daftar Penelitian Dosen' }}</h1>
+        <h1 class="h3 mb-2 text-gray-800">{{ $page->title ?? 'List of Lecturer Research' }}</h1>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Data Penelitian Dosen</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Lecturer Research Data</h6>
                 <button class="btn btn-sm btn-success"
-                    onclick="modalAction('{{ url('penelitian-dosen/create') }}')">Tambah</button>
+                    onclick="modalAction('{{ url('penelitian-dosen/create') }}')">Add</button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -16,10 +16,10 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Dosen</th>
-                                <th>Judul Penelitian</th>
+                                <th>Lecturer Name</th>
+                                <th>Research Title</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -55,7 +55,7 @@
                 method: 'POST',
                 data: form.serialize(),
                 success: function(res) {
-                    toastr.success(res.message || 'Berhasil disimpan');
+                    toastr.success(res.message || 'Saved successfully!');
                     $('#myModal').modal('hide');
                     $('#table_master').DataTable().ajax.reload();
                 },
@@ -66,7 +66,7 @@
                             $('#error-' + field).text(messages[0]);
                         });
                     }
-                    toastr.error('Terjadi kesalahan saat menyimpan');
+                    toastr.error('An error occurred while saving!');
                 }
             });
         });
