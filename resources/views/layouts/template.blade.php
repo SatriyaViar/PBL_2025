@@ -28,6 +28,16 @@
             <div id="content">
                 <div class="container-fluid">
                     @yield('content')
+                    <!-- Modal Container -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <!-- Konten akan diisi via Ajax -->
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             @include('layouts.footer')
@@ -70,6 +80,7 @@
     </script>
 
     @stack('js')
+
 </body>
 
 </html>

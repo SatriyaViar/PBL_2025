@@ -41,7 +41,7 @@
                 <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}" href="{{ asset('/user') }}">User
                     Akreditasi</a>
                 <a class="collapse-item {{ $activeMenu == 'level' ? 'active' : '' }}" href="{{ asset('/level') }}">Level
-                    User Accreditation</a>
+                    User Akreditasi</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
@@ -87,8 +87,8 @@
     </li>
 
     <!-- Sidebar Penelitian - Untuk Koordinator/Admin -->
-{{-- 
-    <li class="nav-item">
+
+    {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianKoordinatorMenu"
             aria-expanded="true" aria-controls="penelitianKoordinatorMenu">
             <i class="fas fa-fw fa-book"></i>
@@ -99,7 +99,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Koordinator:</h6>
                 <a class="collapse-item {{ $activeMenu == 'penelitian-koordinator' ? 'active' : '' }}"
-                    href="{{ route('penelitian-koordinator.index') }}">
+                    href="{{ route('penelitian-dosen-koordinator.index') }}">
                     Daftar Penelitian
                 </a>
             </div>
@@ -113,23 +113,20 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianDosenMenu"
             aria-expanded="true" aria-controls="penelitianDosenMenu">
             <i class="fas fa-fw fa-lightbulb"></i>
-            <span>Penelitian</span>
+            <span>Penelitian Saya</span>
         </a>
         <div id="penelitianDosenMenu" class="collapse" aria-labelledby="headingPenelitianDosen"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Dosen:</h6>
-                <a class="collapse-item {{ $activeMenu == 'penelitian' ? 'active' : '' }}"
-                    href="{{ route('penelitian.index') }}">
-                    Daftar Penelitian
+                <a class="collapse-item {{ $activeMenu == 'penelitian-dosen' ? 'active' : '' }}"
+                    href="{{ route('penelitian-dosen.index') }}">
+                    Daftar Penelitian Saya
                 </a>
 
             </div>
         </div>
     </li>
-
-
-
 
 
     <li class="nav-item">
