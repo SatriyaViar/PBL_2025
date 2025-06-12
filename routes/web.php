@@ -99,11 +99,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
         Route::get('/{kriteria}/{jenis_list}/list', [DokumenController::class, 'list']);
-
+    
         Route::get('/{kriteria}/{jenis_list}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
-        Route::get('/{kriteria}/{jenis_list}/{dokumen}/edit', [DokumenController::class, 'edit'])->name('dokumen.edit');
+       Route::get('/{kriteria}/{jenis_list}/{dokumen}/edit', [DokumenController::class, 'edit'])->name('dokumen.edit');
         Route::put('/{kriteria}/{jenis_list}/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
-        Route::delete('/{kriteria}/{jenis_list}/{dokumen}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+        Route::delete('dokumen/{kriteria}/{jenis_list}/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
+
     });
 
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');

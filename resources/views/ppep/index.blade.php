@@ -102,8 +102,7 @@
                 const token = form.find('input[name="_token"]').val();
                 const method = form.find('input[name="_method"]').val();
                 const kriteria = form.data('kriteria');
-                const jenis = form.data('jenis');
-
+                const jenis = form.data('jenis_list')
                 Swal.fire({
                     title: 'Yakin ingin menghapus?',
                     text: "Data yang dihapus tidak bisa dikembalikan!",
@@ -123,7 +122,7 @@
                                 _method: method,
                             },
                             success: function(response) {
-                                if (response.success) {
+                                if (response.status) {
                                     Swal.fire({
                                         title: 'Terhapus!',
                                         text: response.message,
@@ -131,15 +130,18 @@
                                         timer: 1500,
                                         showConfirmButton: false
                                     });
-
+                                    console.log(jenis);
+                                    
                                     // Refresh isi modal
                                     $.get(`/dokumen/${kriteria}/${jenis}/preview`, function(data) {
+
                                         $('#previewDokumenContent').html(data);
                                     });
                                 } else {
                                     Swal.fire('Gagal', response.message, 'error');
                                 }
                             },
+
                             error: function(xhr) {
                                 Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus dokumen.',
                                     'error');
