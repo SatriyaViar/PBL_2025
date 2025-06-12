@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container-fluid">
+        <div class="mb-3">
+            <a href="{{ route('dokumen.generatePDF', ['kriteria_nama' => $kriteria_nama]) }}" target="_blank" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> Generate PDF Seluruh Dokumen
+            </a>
+        </div>
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">{{ $page->title }}</h1>
@@ -38,12 +43,18 @@
                                         data-kriteria_nama="{{ $kriteria_nama }}" data-jenis_list="{{ $jenis_kode }}">
                                         <i class="fas fa-eye"></i> Preview
                                     </a>
+
+
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 @endforeach
+                <a href="{{ route('dokumen.generatePDF', ['kriteria_nama' => $kriteria_nama]) }}" target="_blank">
+                    <i class="fas fa-file-pdf"></i> Generate PDF
+                </a>
+
             </div>
         @else
             <div class="alert alert-info">
@@ -131,7 +142,7 @@
                                         showConfirmButton: false
                                     });
                                     console.log(jenis);
-                                    
+
                                     // Refresh isi modal
                                     $.get(`/dokumen/${kriteria}/${jenis}/preview`, function(data) {
 

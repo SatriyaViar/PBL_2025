@@ -103,9 +103,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{kriteria}/{jenis_list}/{id}/edit', [DokumenController::class, 'edit'])->name('dokumen.edit');
         Route::put('/{kriteria}/{jenis_list}/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
         Route::delete('/{kriteria}/{jenis_list}/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
-
+        Route::get('/{kriteria_nama}/pdf', [DokumenController::class, 'generatePDF'])->name('dokumen.generatePDF');
     });
 
     Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
-
 });

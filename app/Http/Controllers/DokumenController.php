@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DokuemnPengendalianiModel;
 use App\Models\DokumenEvaluasiModel;
 use App\Models\DokumenPelaksanaanModel;
 use App\Models\DokumenPenetapan;
-use App\Models\DokumenPengendalianiModel;
 use App\Models\DokumenPeningkatanModel;
 use App\Models\KriteriaModel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\DokumenPengendalianModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -393,4 +393,38 @@ class DokumenController extends Controller
         return redirect()->route('dokumen.preview', [$kriteria_nama, $jenis_list])
             ->with('success', 'Dokumen berhasil diperbarui.');
     }
+
+
+
+
+    public function generatePDF($kriteria_nama)
+{
+    $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
+    if (!$kriteria) {
+        abort(404, 'Kriteria tidak ditemukan');
+    }
+
+    // Ambil semua detailKriteria yang terkait dengan kriteria ini
+    $details = \App\Models\DetailKriteriaModel::where('kriteria_id', $kriteria->kriteria_id)->get();
+
+    $dokumen = collect();
+    foreach ($details as $detail) {
+        if ($detail->penetapan) $dokumen->push($detail->penetapan);
+        if ($detail->pelaksanaan) $dokumen->push($detail->pelaksanaan);
+        if ($detail->evaluasi) $dokumen->push($detail->evaluasi);
+        if ($detail->pengendalian) $dokumen->push($detail->pengendalian);
+        if ($detail->peningkatan) $dokumen->push($detail->peningkatan);
+    }
+
+    // Set label untuk judul PDF
+    $label = 'Dokumen untuk Kriteria: ' . $kriteria->kriteria_nama;
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('dokumen.pdf_preview', [
+        'dokumen' => $dokumen,
+        'label' => $label,
+        'kriteria' => $kriteria
+    ]);
+
+    return $pdf->stream('dokumen-preview.pdf');
+} 
 }

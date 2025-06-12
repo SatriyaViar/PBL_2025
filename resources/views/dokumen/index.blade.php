@@ -34,6 +34,7 @@
                     </div>
                 </div>
 
+
                 {{-- Input untuk file --}}
                 <div class="mb-3" id="input-file-group">
                     <label for="file_pendukung" class="form-label">File Pendukung</label>
@@ -246,7 +247,7 @@
                                     break;
                                 case 404:
                                     errorMessage = 'Halaman tidak ditemukan';
-                           e         break;
+                                    break;
                                 case 403:
                                     errorMessage = 'Akses ditolak';
                                     break;
