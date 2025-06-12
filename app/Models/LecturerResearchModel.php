@@ -24,8 +24,8 @@ class LecturerResearchModel extends Model
         return $this->belongsTo(UserModel::class, 'user_id');
     }
 
-    public function research()
+    public function penelitian()
     {
-        return $this->hasMany(ResearchModel::class, 'penelitian_id');
+        return $this->belongsTo(ResearchModel::class, 'penelitian_id');
     }
 }
