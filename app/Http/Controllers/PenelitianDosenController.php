@@ -16,39 +16,45 @@ use Illuminate\Support\Facades\Log;
 class PenelitianDosenController extends Controller
 {
     public function list(Request $request)
-{
-    if ($request->ajax()) {
-        $user = auth()->user()->user_id;
-        $data = LecturerResearchModel::with('dosen', 'penelitian')
-            ->where('user_id', $user)
-            ->select('id_penelitian_dosen', 'user_id', 'penelitian_id', 'status')
-            ->get();
+    {
+        if ($request->ajax()) {
+            try {
+                $user = auth()->user()->user_id;
 
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function ($row) {
-                $id = $row->id_penelitian_dosen;
-                $btn = '
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-info" title="Detail"
-                            onclick="modalAction(\'' . url("penelitian/dosen/" . $id) . '\')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-warning" title="Edit"
-                            onclick="modalAction(\'' . url("penelitian/dosen/" . $id . "/edit") . '\')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-danger" title="Hapus"
-                            onclick="deletePenelitian(' . $id . ')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>';
-                return $btn;
-            })
-            ->rawColumns(['action']) // penting agar tombol HTML dirender
-            ->make(true);
+                $data = LecturerResearchModel::with('dosen', 'penelitian')
+                    ->where('user_id', $user)
+                    ->select('id_penelitian_dosen', 'id_penelitian', 'id_dosen', 'status');
+
+                return DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($row) {
+                        $id = $row->id_penelitian_dosen;
+                        $btn = '
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-info" title="Detail"
+                                onclick="modalAction(\'' . url("penelitian-dosen/dosen/" . $id) . '\')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-warning" title="Edit"
+                                onclick="modalAction(\'' . url("penelitian-dosen/dosen/" . $id . "/edit") . '\')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" title="Hapus"
+                                onclick="deletePenelitian(' . $id . ')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+            } catch (\Exception $e) {
+                Log::error("Error DataTables Penelitian Dosen: " . $e->getMessage());
+                return response()->json(['message' => 'Terjadi kesalahan pada server.'], 500);
+            }
+        }
     }
-}
+
 
     /**
      * Display a listing of the resource.
@@ -134,7 +140,11 @@ class PenelitianDosenController extends Controller
                 'message' => 'Penelitian berhasil disimpan'
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
-            Log::error("Gagal menyimpan penelitian: " . $e->getMessage());
+            Log::error("Gagal menyimpan penelitian: " . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
 
             return response()->json([
                 'message' => 'Terjadi kesalahan saat menyimpan data.'
@@ -291,7 +301,7 @@ class PenelitianDosenController extends Controller
                 Log::info("LecturerResearchModel ID $id berhasil dihapus.");
 
                 return response()->json([
-                    'message' => 'Relasi dosen dalam penelitian berhasil dihapus!'
+                    'message' => 'Data berhasil dihapus!'
                 ], Response::HTTP_OK);
             } catch (\Exception $e) {
                 Log::error("Gagal menghapus LecturerResearchModel ID $id: " . $e->getMessage());
