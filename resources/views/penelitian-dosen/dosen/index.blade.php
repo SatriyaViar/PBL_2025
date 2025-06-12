@@ -72,7 +72,7 @@
         });
 
         $(document).ready(function() {
-            $('#table_master').DataTable({
+            $('#table-penelitian').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
