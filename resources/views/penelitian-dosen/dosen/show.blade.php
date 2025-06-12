@@ -17,7 +17,7 @@
                 <tr><th class="text-right">Status</th><td>{{ ucfirst($penelitianDosen->status) }}</td></tr>
                 <tr><th class="text-right">Internal Funding</th><td>Rp{{ number_format((float)$penelitianDosen->penelitian->pendanaan_internal) }}</td></tr>
                 <tr><th class="text-right">External Funding</th><td>Rp{{ number_format((float)$penelitianDosen->penelitian->pendanaan_eksternal) }}</td></tr>
-                <tr><th class="text-right">Link</th>
+                <tr><th class="text-right">Research Link</th>
                     <td><a href="{{ $penelitianDosen->penelitian->link_penelitian }}" target="_blank">{{ $penelitianDosen->penelitian->link_penelitian }}</a></td>
                 </tr>
             </table>
