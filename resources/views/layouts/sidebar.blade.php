@@ -10,7 +10,7 @@
             <img src="{{ asset('img/LogoJTI.png') }}" alt="Logo JTI" class="img-fluid" style="width: 70px; height: 40px;">
 
         </div>
-        <div class="sidebar-brand-text mx-3">Akreditasi Polinema </div>
+        <div class="sidebar-brand-text mx-3">Polytechnic Accreditation</div>
     </a>
 
     <!-- Divider -->
@@ -33,15 +33,15 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dataUser" aria-expanded="true"
             aria-controls="dataUser">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Data User</span>
+            <span>User Data</span>
         </a>
         <div id="dataUser" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Data User:</h6>
-                <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}" href="{{ asset('/user') }}">User
-                    Akreditasi</a>
-                <a class="collapse-item {{ $activeMenu == 'level' ? 'active' : '' }}" href="{{ asset('/level') }}">Level
-                    User Akreditasi</a>
+                <h6 class="collapse-header">User Data:</h6>
+                <a class="collapse-item {{ $activeMenu == 'user' ? 'active' : '' }}"
+                    href="{{ asset('/user') }}">Accreditation User</a>
+                <a class="collapse-item {{ $activeMenu == 'level' ? 'active' : '' }}"
+                    href="{{ asset('/level') }}">Accreditation User Level</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
@@ -55,13 +55,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#kriteriaAkreditasi"
             aria-expanded="true" aria-controls="kriteriaAkreditasis">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Kriteria Akreditasi</span>
+            <span>Accreditation Criteria</span>
         </a>
         <div id="kriteriaAkreditasi" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Kriteria Akreditasi:</h6>
+                <h6 class="collapse-header">Accreditation Criteria:</h6>
                 <a class="collapse-item {{ $activeMenu == 'kriteria' ? 'active' : '' }}"
-                    href="{{ asset('/kriteria') }}">Kriteria Akreditasi</a>
+                    href="{{ asset('/kriteria') }}">Accreditation Criteria</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
@@ -73,7 +73,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#kriteriaAkreditasiPPEP"
             aria-expanded="true" aria-controls="kriteriaAkreditasis">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Kriteria Akreditasi PPEP</span>
+            <span>PPEPP of Accreditation</span>
         </a>
         <div id="kriteriaAkreditasiPPEP" class="collapse" aria-labelledby="headingPages"
             data-parent="#accordionSidebar">
@@ -113,17 +113,14 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#penelitianDosenMenu"
             aria-expanded="true" aria-controls="penelitianDosenMenu">
             <i class="fas fa-fw fa-lightbulb"></i>
-            <span>Penelitian Saya</span>
+            <span>Lecturer Research</span>
         </a>
         <div id="penelitianDosenMenu" class="collapse" aria-labelledby="headingPenelitianDosen"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Dosen:</h6>
+                <h6 class="collapse-header">Lecturer:</h6>
                 <a class="collapse-item {{ $activeMenu == 'penelitian-dosen' ? 'active' : '' }}"
-                    href="{{ route('penelitian-dosen.index') }}">
-                    Daftar Penelitian Saya
-                </a>
-
+                    href="{{ route('penelitian-dosen.index') }}">List of Research</a>
             </div>
         </div>
     </li>
