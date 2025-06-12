@@ -1,5 +1,5 @@
 @empty($penelitianDosen)
-    <div class="alert alert-danger">Data tidak ditemukan.</div>
+    <div class="alert alert-danger">Data not found!</div>
 @else
     <form action="{{ route('penelitian-dosen.destroy', $penelitianDosen->id_penelitian_dosen) }}" method="POST"
         id="form-delete">
@@ -8,19 +8,19 @@
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Hapus Penelitian Dosen</h5>
+                    <h5 class="modal-title">Delete Lecturer Research</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Tutup"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning">
-                        <strong>Yakin ingin menghapus?</strong><br>
-                        Judul: <b>{{ $penelitianDosen->penelitian->judul_penelitian }}</b>
+                        <strong>Are you sure you want to delete this?</strong><br>
+                        Title: <b>{{ $penelitianDosen->penelitian->judul_penelitian }}</b>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-secondary">Batal</button>
-                    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
                 </div>
             </div>
         </div>
