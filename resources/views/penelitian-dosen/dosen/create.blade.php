@@ -1,7 +1,8 @@
+<form id="formCreate" action="{{ url('penelitian-dosen') }}" method="POST">
+            @csrf
+
 <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <form id="formCreate" action="{{ url('penelitian-dosen') }}" method="POST">
-            @csrf
 
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Penelitian</h5>
@@ -37,33 +38,94 @@
                 <button type="submit" class="btn btn-success">Simpan</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
-        </form>
+
 
     </div>
 </div>
-
+</form>
 <script>
-    $('#formCreate').submit(function(e) {
-        e.preventDefault();
-
-        let form = $(this);
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            success: function(res) {
-                toastr.success(res.message || 'Berhasil disimpan');
-                $('#myModal').modal('hide');
-                $('#table_master').DataTable().ajax.reload();
-            },
-            error: function(err) {
-                $('.text-danger').text('');
-                if (err.responseJSON?.errors) {
-                    $.each(err.responseJSON.errors, function(field, messages) {
-                        $('#error-' + field).text(messages[0]);
-                    });
+    $(document).ready(function () {
+        $("#formCreate").validate({
+            rules: {
+                no_surat_tugas: {
+                    required: true
+                },
+                judul_penelitian: {
+                    required: true,
+                    minlength: 3
+                },
+                pendanaan_internal: {
+                    required: true
+                },
+                pendanaan_eksternal: {
+                    required: true
+                },
+                link_penelitian: {
+                    required: true,
+                    url: true
                 }
-                toastr.error('Terjadi kesalahan saat menyimpan');
+            },
+            messages: {
+                link_penelitian: {
+                    url: "Format link tidak valid"
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    url: form.action,
+                    type: form.method,
+                    data: $(form).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    success: function (response) {
+                        if (response.status) {
+                            $('#myModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.message
+                            });
+                            $('#table_master').DataTable().ajax.reload();
+                        } else {
+                            $('.text-danger').text('');
+                            $.each(response.msgField || {}, function (prefix, val) {
+                                $('#error-' + prefix).text(val[0]);
+                            });
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi Kesalahan',
+                                text: response.message || 'Gagal menyimpan data'
+                            });
+                        }
+                    },
+                    error: function (err) {
+                        $('.text-danger').text('');
+                        if (err.responseJSON?.errors) {
+                            $.each(err.responseJSON.errors, function (field, messages) {
+                                $('#error-' + field).text(messages[0]);
+                            });
+                        }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Terjadi Kesalahan',
+                            text: 'Gagal menyimpan data'
+                        });
+                    }
+                });
+                return false;
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element) {
+                $(element).removeClass('is-invalid');
             }
         });
     });
