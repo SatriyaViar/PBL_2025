@@ -5,38 +5,38 @@
     <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Tambah Penelitian</h5>
+                <h5 class="modal-title">Add Research</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="modal-body">
                 <div class="form-group">
-                    <label>No Surat Tugas</label>
+                    <label>Letter Number</label>
                     <input type="text" name="no_surat_tugas" class="form-control">
                     <small class="text-danger" id="error-no_surat_tugas"></small>
                 </div>
                 <div class="form-group">
-                    <label>Judul Penelitian</label>
+                    <label>Research Title</label>
                     <input type="text" name="judul_penelitian" class="form-control">
                     <small class="text-danger" id="error-judul_penelitian"></small>
                 </div>
                 <div class="form-group">
-                    <label>Pendanaan Internal</label>
+                    <label>Internal Funding</label>
                     <input type="text" name="pendanaan_internal" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Pendanaan Eksternal</label>
+                    <label>External Funding</label>
                     <input type="text" name="pendanaan_eksternal" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label>Link Penelitian</label>
+                    <label>Research Link</label>
                     <input type="text" name="link_penelitian" class="form-control">
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Simpan</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
 
 
@@ -67,7 +67,7 @@
             },
             messages: {
                 link_penelitian: {
-                    url: "Format link tidak valid"
+                    url: "Invalid link format!"
                 }
             },
             submitHandler: function (form) {
@@ -84,7 +84,7 @@
                             $('#myModal').modal('hide');
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Berhasil',
+                                title: 'Successful',
                                 text: response.message
                             });
                             $('#table_master').DataTable().ajax.reload();
@@ -95,8 +95,8 @@
                             });
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Terjadi Kesalahan',
-                                text: response.message || 'Gagal menyimpan data'
+                                title: 'An error has occurred',
+                                text: response.message || 'Failed to save data!'
                             });
                         }
                     },
@@ -109,8 +109,8 @@
                         }
                         Swal.fire({
                             icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: 'Gagal menyimpan data'
+                            title: 'An error has occurred',
+                            text: 'Failed to save data!'
                         });
                     }
                 });
