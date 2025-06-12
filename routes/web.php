@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\KriteriaController;
+use App\Http\Controllers\LevelController;
+use App\Http\Controllers\PPEPController;
+use App\Http\Controllers\SidebarController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +21,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::pattern('id', '[0-9]+');
 Route::get('/', [DashboardController::class, 'index']);
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
 Route::post('login', [AuthController::class, 'postlogin']);
@@ -91,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
         Route::get('/{kriteria}/{jenis_list}/list', [DokumenController::class, 'list']);
+<<<<<<< HEAD
         Route::get('/{kriteria}/{jenis_list}/preview', [DokumenController::class, 'preview'])->name('dokumen.preview');
         Route::get('/{kriteria}/{jenis_list}/{dokumen}/edit', [DokumenController::class, 'edit'])->name('dokumen.edit');
         Route::put('/{kriteria}/{jenis_list}/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
@@ -101,3 +115,12 @@ Route::middleware(['auth'])->group(function () {
 
 });
 >>>>>>> Stashed changes
+=======
+        Route::get('/{kriteria}/{jenis_list}/preview', [DokumenController::class, 'preview']);
+
+    });
+
+    Route::get('/ppep/{id}', [PPEPController::class, 'index'])->name('ppep.index');
+    Route::get('/ppep/{id}/preview', [DokumenController::class, 'preview']);
+});
+>>>>>>> 91c0a4d4301dc838fa568faf34a64046f7d6cee9

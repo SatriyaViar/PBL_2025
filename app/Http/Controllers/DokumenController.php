@@ -6,6 +6,7 @@ use App\Models\DokumenPelaksanaanModel;
 use App\Models\KriteriaModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -153,7 +154,6 @@ class DokumenController extends Controller
             ], 500);
         }
     }
-
     public function preview($kriteria_nama, $jenis_list)
     {
         // Ambil data kriteria berdasarkan nama
