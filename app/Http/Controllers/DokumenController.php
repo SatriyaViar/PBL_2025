@@ -247,67 +247,150 @@ class DokumenController extends Controller
     }
 
     public function destroy($kriteria_nama, $jenis_list, $id)
-{
-    try {
-        // Validasi kriteria
-        $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
-        if (!$kriteria) {
+    {
+        try {
+            // Validasi kriteria
+            $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
+            if (!$kriteria) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Kriteria tidak ditemukan.'
+                ], 404);
+            }
+
+            // Ambil dokumen berdasarkan ID dan jenis dokumen
+            switch (strtolower($jenis_list)) {
+                case 'a':
+                    $dokumen = DokumenPenetapan::findOrFail($id);
+                    break;
+                case 'b':
+                    $dokumen = DokumenPelaksanaanModel::find($id);
+                    break;
+                case 'c':
+                    $dokumen = DokumenEvaluasiModel::find($id);
+                    break;
+                case 'd':
+                    $dokumen = DokumenPengendalianiModel::find($id);
+                    break;
+                case 'e':
+                    $dokumen = DokumenPeningkatanModel::find($id);
+                    break;
+                default:
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Jenis dokumen tidak valid.'
+                    ], 404);
+            }
+
+            if (!$dokumen) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Dokumen tidak ditemukan.'
+                ], 404);
+            }
+
+            // Hapus file jika ada
+            if ($dokumen->file_pendukung && Storage::exists('public/' . $dokumen->file_pendukung)) {
+                Storage::delete('public/' . $dokumen->file_pendukung);
+            }
+
+            // Hapus dokumen
+            $dokumen->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Dokumen berhasil dihapus',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in DokumenController@delete: ' . $e->getMessage());
             return response()->json([
                 'status' => false,
-                'message' => 'Kriteria tidak ditemukan.'
-            ], 404);
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function edit($kriteria_nama, $jenis_list, $id)
+    {
+        $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
+        if (!$kriteria) {
+            return redirect()->back()->with('error', 'Kriteria tidak ditemukan.');
         }
 
-        // Ambil dokumen berdasarkan ID dan jenis dokumen
+        switch (strtolower($jenis_list)) {
+            case 'a':
+                $dokumen = DokumenPenetapan::findOrFail($id);
+                $label = 'Penetapan';
+                break;
+            case 'b':
+                $dokumen = DokumenPelaksanaanModel::findOrFail($id);
+                $label = 'Pelaksanaan';
+                break;
+            case 'c':
+                $dokumen = DokumenEvaluasiModel::findOrFail($id);
+                $label = 'Evaluasi';
+                break;
+            case 'd':
+                $dokumen = DokumenPengendalianiModel::findOrFail($id);
+                $label = 'Pengendalian';
+                break;
+            case 'e':
+                $dokumen = DokumenPeningkatanModel::findOrFail($id);
+                $label = 'Peningkatan';
+                break;
+            default:
+                return redirect()->back()->with('error', 'Jenis dokumen tidak valid.');
+        }
+
+        return view('dokumen.edit', compact('dokumen', 'kriteria', 'jenis_list', 'label', 'kriteria_nama'));
+    }
+
+    public function update(Request $request, $kriteria_nama, $jenis_list, $id)
+    {
+        $kriteria_nama = KriteriaModel::where('kriteria_nama', $kriteria_nama)->firstOrFail();
+
         switch (strtolower($jenis_list)) {
             case 'a':
                 $dokumen = DokumenPenetapan::findOrFail($id);
                 break;
             case 'b':
-                $dokumen = DokumenPelaksanaanModel::find($id);
+                $dokumen = DokumenPelaksanaanModel::findOrFail($id);
                 break;
             case 'c':
-                $dokumen = DokumenEvaluasiModel::find($id);
+                $dokumen = DokumenEvaluasiModel::findOrFail($id);
                 break;
             case 'd':
-                $dokumen = DokumenPengendalianiModel::find($id);
+                $dokumen = DokumenPengendalianiModel::findOrFail($id);
                 break;
             case 'e':
-                $dokumen = DokumenPeningkatanModel::find($id);
+                $dokumen = DokumenPeningkatanModel::findOrFail($id);
                 break;
             default:
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Jenis dokumen tidak valid.'
-                ], 404);
+                return redirect()->back()->with('error', 'Jenis dokumen tidak valid.');
         }
 
-        if (!$dokumen) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Dokumen tidak ditemukan.'
-            ], 404);
-        }
-
-        // Hapus file jika ada
-        if ($dokumen->file_pendukung && Storage::exists('public/' . $dokumen->file_pendukung)) {
-            Storage::delete('public/' . $dokumen->file_pendukung);
-        }
-
-        // Hapus dokumen
-        $dokumen->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Dokumen berhasil dihapus',
+        $request->validate([
+            'description' => 'required|string',
+            'link' => 'nullable|url',
+            'file_pendukung' => 'nullable|mimes:pdf|max:2048',
         ]);
-    } catch (\Exception $e) {
-        Log::error('Error in DokumenController@delete: ' . $e->getMessage());
-        return response()->json([
-            'status' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-        ], 500);
-    }
-}
 
+        $dokumen->description = $request->description;
+        $dokumen->link = $request->link;
+
+        if ($request->hasFile('file_pendukung')) {
+            // Hapus file lama
+            if ($dokumen->file_pendukung && Storage::exists('public/' . $dokumen->file_pendukung)) {
+                Storage::delete('public/' . $dokumen->file_pendukung);
+            }
+
+            $path = $request->file('file_pendukung')->store('dokumen', 'public');
+            $dokumen->file_pendukung = $path;
+        }
+
+        $dokumen->save();
+
+        return redirect()->route('dokumen.preview', [$kriteria_nama, $jenis_list])
+            ->with('success', 'Dokumen berhasil diperbarui.');
+    }
 }

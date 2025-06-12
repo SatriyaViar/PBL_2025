@@ -41,10 +41,11 @@
                         <!-- Kolom Aksi untuk tombol Edit dan Hapus -->
                         <td>
                             <!-- Tombol Edit -->
-                            <a href="{{ route('dokumen.edit', [$doc->kriteria->kriteria_nama, $label, $doc]) }}"
-                                class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
+                            <a href="{{ route('dokumen.edit', [$doc->kriteria->kriteria_nama, $jenis_list, $doc->getkey()]) }}"
+    class="btn btn-warning btn-sm">
+    <i class="fas fa-edit"></i> Edit
+</a>
+
 
                             <!-- Tombol Hapus -->
                             <form method="POST"

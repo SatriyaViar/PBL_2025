@@ -246,7 +246,7 @@
                                     break;
                                 case 404:
                                     errorMessage = 'Halaman tidak ditemukan';
-                                    break;
+                           e         break;
                                 case 403:
                                     errorMessage = 'Akses ditolak';
                                     break;
