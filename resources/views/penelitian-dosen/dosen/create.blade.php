@@ -1,119 +1,69 @@
-<form id="form-tambah" action="{{ route('penelitian.store') }}" method="post">
-    @csrf
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form id="formCreate" action="{{ url('penelitian-dosen') }}" method="POST">
+            @csrf
 
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Add Research Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Penelitian</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
             <div class="modal-body">
-
-                {{-- No Surat Tugas --}}
-                <div class="mb-3">
-                    <label class="form-label">No Assignment Letter</label>
-                    <input type="text" class="form-control" name="no_surat_tugas" required>
-                    <small id="error-no_surat_tugas" class="form-text text-danger error-text"></small>
+                <div class="form-group">
+                    <label>No Surat Tugas</label>
+                    <input type="text" name="no_surat_tugas" class="form-control">
+                    <small class="text-danger" id="error-no_surat_tugas"></small>
                 </div>
-
-                {{-- Judul Penelitian --}}
-                <div class="mb-3">
-                    <label class="form-label">Research Title</label>
-                    <input type="text" class="form-control" name="judul_penelitian" required>
-                    <small id="error-judul_penelitian" class="form-text text-danger error-text"></small>
+                <div class="form-group">
+                    <label>Judul Penelitian</label>
+                    <input type="text" name="judul_penelitian" class="form-control">
+                    <small class="text-danger" id="error-judul_penelitian"></small>
                 </div>
-
-                {{-- Pendanaan Internal --}}
-                <div class="mb-3">
-                    <label class="form-label">Internal Funding</label>
-                    <input type="text" class="form-control" name="pendanaan_internal">
-                    <small id="error-pendanaan_internal" class="form-text text-danger error-text"></small>
+                <div class="form-group">
+                    <label>Pendanaan Internal</label>
+                    <input type="text" name="pendanaan_internal" class="form-control">
                 </div>
-
-                {{-- Pendanaan Eksternal --}}
-                <div class="mb-3">
-                    <label class="form-label">External Funding</label>
-                    <input type="text" class="form-control" name="pendanaan_eksternal">
-                    <small id="error-pendanaan_eksternal" class="form-text text-danger error-text"></small>
+                <div class="form-group">
+                    <label>Pendanaan Eksternal</label>
+                    <input type="text" name="pendanaan_eksternal" class="form-control">
                 </div>
-
-                {{-- Link Penelitian --}}
-                <div class="mb-3">
-                    <label class="form-label">Research Links</label>
-                    <textarea name="link_penelitian" id="link_penelitian" class="form-control"></textarea>
-                    <small id="error-link_penelitian" class="form-text text-danger error-text"></small>
+                <div class="form-group">
+                    <label>Link Penelitian</label>
+                    <input type="text" name="link_penelitian" class="form-control">
                 </div>
-
             </div>
 
             <div class="modal-footer">
-                <button type="button" data-bs-dismiss="modal" class="btn btn-secondary">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-success">Simpan</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
-        </div>
-    </div>
-</form>
+        </form>
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote.min.js"></script>
+    </div>
+</div>
 
 <script>
-    $(document).ready(function () {
-        $('#link_penelitian').summernote({
-            placeholder: 'Enter the research link or description',
-            tabsize: 2,
-            height: 200,
-        });
+    $('#formCreate').submit(function(e) {
+        e.preventDefault();
 
-        $('#form-tambah').validate({
-            rules: {
-                no_surat_tugas: { required: true },
-                judul_penelitian: { required: true },
+        let form = $(this);
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: form.serialize(),
+            success: function(res) {
+                toastr.success(res.message || 'Berhasil disimpan');
+                $('#myModal').modal('hide');
+                $('#table_master').DataTable().ajax.reload();
             },
-            submitHandler: function (form) {
-                $.ajax({
-                    url: form.action,
-                    type: form.method,
-                    data: $(form).serialize(),
-                    success: function (res, textStatus, xhr) {
-                        if (xhr.status === 200) {
-                            $('#myModal').modal('hide');
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: res.message
-                            });
-                            dataMaster.ajax.reload();
-                        }
-                    },
-                    error: function (xhr) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'An error has occurred',
-                            text: xhr.responseJSON?.message || 'An error has occurred!'
-                        });
-
-                        if (xhr.responseJSON?.msgField) {
-                            $('.error-text').text('');
-                            $.each(xhr.responseJSON.msgField, function (prefix, val) {
-                                $('#error-' + prefix).text(val[0]);
-                            });
-                        }
-                    }
-                });
-                return false;
-            },
-            errorElement: 'span',
-            errorPlacement: function (error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.mb-3').append(error);
-            },
-            highlight: function (element) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element) {
-                $(element).removeClass('is-invalid');
+            error: function(err) {
+                $('.text-danger').text('');
+                if (err.responseJSON?.errors) {
+                    $.each(err.responseJSON.errors, function(field, messages) {
+                        $('#error-' + field).text(messages[0]);
+                    });
+                }
+                toastr.error('Terjadi kesalahan saat menyimpan');
             }
         });
     });
