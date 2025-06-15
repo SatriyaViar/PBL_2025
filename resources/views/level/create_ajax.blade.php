@@ -1,4 +1,5 @@
-<form action="{{ url('/level/ajax') }}" method="POST" id="form-tambah">
+<form action="{{ url('/level/store_ajax') }}" method="POST" id="form-tambah">
+
     @csrf
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

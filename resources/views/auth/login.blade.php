@@ -1,180 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Login</title>
-
-    <!-- Custom fonts for this template-->
-    <link href="{{ asset('/boostraap/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="{{ asset('/boostraap/css/sb-admin-2.min.css') }}" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Polinema</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<body class="bg-[#213448] flex items-center justify-center min-h-screen">
+  <div class="bg-[#547792] shadow-lg rounded-xl px-10 py-8 w-full max-w-sm text-center text-white">
+    <p class="text-white font-medium text-xl mb-6">Accreditation</p>
+    <img src="/poltek.png" alt="Polinema Logo" class="mx-auto mb-8 w-40" />
 
-<body class="bg-gradient-primary">
+    <!-- Alert Box -->
+    <div id="alert" class="hidden mb-4 p-3 rounded text-sm font-semibold"></div>
 
-    <div class="container">
+    <!-- Login Form -->
+    <form id="loginForm">
+      <div class="mb-4 text-left">
+        <label class="block text-white mb-1">Username</label>
+        <input type="text" id="username" name="username" required
+          class="w-full px-4 py-2 rounded-md bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
 
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
+      <div class="mb-6 text-left">
+        <label class="block text-white mb-1">Password</label>
+        <input type="password" id="password" name="password" required
+          class="w-full px-4 py-2 rounded-md bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
 
-            <div class="col-xl-10 col-lg-12 col-md-9">
+      <button type="submit"
+        class="block w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200 mb-3">
+        Login
+      </button>
+    </form>
 
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome To Akreditasi Polinema</h1>
-                                    </div>
-                                    <form action="{{ url('login') }}" method="POST" id="form-login">
-                                        @csrf
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="username" name="username" class="form-control"
-                                                placeholder="Username">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-user"></span>
-                                                </div>
-                                            </div>
-                                            <small id="error-username" class="error-text text-danger"></small>
-                                        </div>
-                                        <div class="input-group mb-3">
-                                            <input type="password" id="password" name="password" class="form-control"
-                                                placeholder="Password">
-                                            <div class="input-group-append">
-                                                <div class="input-group-text">
-                                                    <span class="fas fa-lock"></span>
-                                                </div>
-                                            </div>
-                                            <small id="error-password" class="error-text text-danger"></small>
-                                        </div>
-                                        <div class="form-group mb-3">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-16">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                                        </div>
-                                        <hr>
-                                    </form>
-                                    <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <a href="/" class="block w-full bg-gray-500 text-white font-semibold py-2 rounded-md hover:bg-gray-600 transition duration-200 text-center">
+      Back to Home Page
+    </a>
 
-            </div>
+    <p class="mt-6 text-gray-300 text-sm">© Polinema Student 2025</p>
+  </div>
 
-        </div>
+  <script>
+    $('#loginForm').on('submit', function(e) {
+      e.preventDefault();
 
-    </div>
+      let username = $('#username').val();
+      let password = $('#password').val();
+      let alertBox = $('#alert');
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('boostraap/vendor/jquery/jquery.min.js') }}"></script>
-    <!-- jQuery Wajib duluan -->
-    <script src="{{ asset('/boostraap/vendor/jquery/jquery.min.js') }}"></script>
+      // Clear alert
+      alertBox.removeClass().addClass('hidden').text('');
 
-    <!-- Plugin tambahan -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      $.ajax({
+        url: '/login',
+        type: 'POST',
+        data: {
+          _token: $('meta[name="csrf-token"]').attr('content'),
+          username: username,
+          password: password
+        },
+        success: function(response) {
+          alertBox
+            .removeClass()
+            .addClass('mb-4 p-3 rounded bg-green-500 text-white')
+            .text('Login berhasil! Mengarahkan...');
+          setTimeout(() => {
+            window.location.href = '/dashboard';
+          }, 1500);
+        },
+        error: function(xhr) {
+          let errorMsg = 'Login gagal. Cek username/password.';
 
-
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('boostraap/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-
-
-
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('boostraap/js/sb-admin-2.min.js') }}"></script>
-
-
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          if (xhr.status === 422) {
+            const errors = xhr.responseJSON.errors;
+            if (errors) {
+              errorMsg = Object.values(errors)
+                .map(msgs => msgs.join(', '))
+                .join(', ');
             }
-        });
-        $(document).ready(function() {
-            $("#form-login").validate({
-                rules: {
-                    username: {
-                        required: true,
-                        minlength: 4,
-                        maxlength: 20
-                    },
-                    password: {
-                        required: true,
-                        minlength: 5,
-                        maxlength: 20
-                    }
-                },
-                submitHandler: function(form) { // ketika valid, maka bagian yg akan dijalankan
-                    $.ajax({
-                        url: form.action,
-                        type: form.method,
-                        data: $(form).serialize(),
-                        success: function(response) {
-                            if (response.status) { // jika sukses
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil',
-                                    text: response.message,
-                                }).then(function() {
-                                    window.location = response.redirect;
-                                });
-                            } else { // jika error
-                                $('.error-text').text('');
-                                $.each(response.msgField, function(prefix, val) {
-                                    $('#error-' + prefix).text(val[0]);
-                                });
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Terjadi Kesalahan',
-                                    text: response.message
-                                });
-                            }
-                        }
-                    });
-                    return false;
-                },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.input-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
-</body>
+          } else if (xhr.responseJSON?.message) {
+            errorMsg = xhr.responseJSON.message;
+          }
 
+          alertBox
+            .removeClass()
+            .addClass('mb-4 p-3 rounded bg-red-500 text-white')
+            .text(errorMsg);
+        }
+      });
+    });
+  </script>
+</body>
 </html>

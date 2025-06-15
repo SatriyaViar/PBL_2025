@@ -18,7 +18,7 @@ class UserModel extends Authenticatable
 
     protected $hidden = ['password'];
 
-    protected $casts = ['password' => 'hashed'];
+    // protected $casts = ['password' => 'hashed'];
 
     public function level(): BelongsTo
     {
