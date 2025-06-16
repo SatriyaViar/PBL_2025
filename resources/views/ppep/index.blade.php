@@ -3,9 +3,13 @@
 @section('content')
     <div class="container-fluid">
         <div class="mb-3">
-            <a href="{{ route('dokumen.generatePDF', ['kriteria_nama' => $kriteria_nama]) }}" target="_blank" class="btn btn-danger">
-                <i class="fas fa-file-pdf"></i> Generate PDF Seluruh Dokumen
-            </a>
+
+
+<a href="{{ route('dokumen.generatePDF', ['kriteria' => $kriteria->kriteria_id]) }}" class="btn btn-danger mb-3">
+    <i class="fas fa-file-pdf"></i> Download PDF
+</a>
+
+
         </div>
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -51,9 +55,9 @@
                         </div>
                     </div>
                 @endforeach
-                <a href="{{ route('dokumen.generatePDF', ['kriteria_nama' => $kriteria_nama]) }}" target="_blank">
+                {{-- <a href="{{ route('dokumen.generatePDF', ['kriteria_nama' => $kriteria_nama]) }}" target="_blank">
                     <i class="fas fa-file-pdf"></i> Generate PDF
-                </a>
+                </a> --}}
 
             </div>
         @else

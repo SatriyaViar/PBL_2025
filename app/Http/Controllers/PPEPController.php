@@ -18,7 +18,8 @@ class PPEPController extends Controller
 
     public function index($id)
     {
-        $kriteria = KriteriaModel::find($id);
+  $kriteria = KriteriaModel::findOrFail($id);
+
         $kriteria_nama = $kriteria ? $kriteria->kriteria_nama : 'Tidak Ditemukan';
 
         $breadcrumb = (object)[
@@ -26,7 +27,7 @@ class PPEPController extends Controller
             'list'  => ['Home', 'Kriteria', $kriteria_nama ?? 'Semua'],
         ];
 
-        
+
         $page = (object)[
             'title' => 'Kriteria Akreditasi' . ($kriteria_nama ? ' - ' . $kriteria_nama : ''),
         ];
@@ -39,6 +40,7 @@ class PPEPController extends Controller
             'activeMenu' => $activeMenu,
             'jenis_list' => $this->jenis_list,
             'kriteria_nama' => $kriteria_nama,
+            'kriteria' => $kriteria
         ]);
     }
 }

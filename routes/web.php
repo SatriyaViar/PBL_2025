@@ -96,6 +96,7 @@ Route::middleware(['auth', 'role:2'])->group(function () {
 
 // Dokumen (aksesnya bisa dibatasi lebih lanjut jika perlu)
 Route::middleware(['auth'])->prefix('dokumen')->group(function () {
+    Route::get('/{kriteria}/generate-pdf', [DokumenController::class, 'generatePDF'])->name('dokumen.generatePDF');
     Route::get('/{kriteria}/{jenis_list}', [DokumenController::class, 'index'])->name('dokumen.index');
     Route::post('/{kriteria}/{jenis_list}/store', [DokumenController::class, 'store'])->name('dokumen.store');
     Route::get('/{kriteria}/{jenis_list}/list', [DokumenController::class, 'list']);
@@ -103,7 +104,7 @@ Route::middleware(['auth'])->prefix('dokumen')->group(function () {
     Route::get('/{kriteria}/{jenis_list}/{id}/edit', [DokumenController::class, 'edit'])->name('dokumen.edit');
     Route::put('/{kriteria}/{jenis_list}/{dokumen}', [DokumenController::class, 'update'])->name('dokumen.update');
     Route::delete('/{kriteria}/{jenis_list}/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
-    Route::get('/{kriteria_nama}/pdf', [DokumenController::class, 'generatePDF'])->name('dokumen.generatePDF');
+
 });
 
 // Static views

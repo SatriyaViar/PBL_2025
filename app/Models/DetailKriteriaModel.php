@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\DokumenPengendalianModel; // Corrected use statement
+use App\Models\DokumenPenetapan; // Added use statement
+use App\Models\DokumenPelaksanaanModel; // Added use statement
+use App\Models\DokumenEvaluasiModel; // Added use statement
+use App\Models\DokumenPeningkatanModel; // Added use statement
+use App\Models\KomenModel; // Added use statement
+use App\Models\KriteriaModel; // Added use statement
 
 class DetailKriteriaModel extends Model
 {
     use HasFactory;
-
-     use HasFactory;
 
     // Tentukan nama tabel jika berbeda
     protected $table = 't_detail_criteria';
@@ -41,7 +46,7 @@ class DetailKriteriaModel extends Model
     // Relasi ke t_pengendalian
     public function pengendalian()
     {
-        return $this->belongsTo(DokumenPengendalianiModel::class, 'pengendalian_id', 'pengendalian_id');
+        return $this->belongsTo(DokumenPengendalianModel::class, 'pengendalian_id', 'pengendalian_id'); // Corrected model name
     }
 
     // Relasi ke t_peningkatan

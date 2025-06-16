@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Clegginabox\PDFMerger\PDFMerger;
 use App\Models\DokumenEvaluasiModel;
 use App\Models\DokumenPelaksanaanModel;
 use App\Models\DokumenPenetapan;
-use App\Models\DokumenPeningkatanModel;
-use App\Models\KriteriaModel;
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\DokumenPengendalianModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-
+  use App\Models\DokumenPeningkatanModel;
+  use App\Models\KriteriaModel;
+  use App\Models\DokumenPengendalianModel;
+  use App\Models\DetailKriteriaModel;
+  use Barryvdh\DomPDF\Facade\Pdf;
+  use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -32,12 +32,12 @@ class DokumenController extends Controller
             case 'c':
                 $dokumen = DokumenEvaluasiModel::where('kriteria_id', $kriteria_nama)->get();
                 $label = 'Evaluasi';
-                break;
-            case 'd':
-                $dokumen = DokumenPengendalianiModel::where('kriteria_id', $kriteria_nama)->get();
-                $label = 'Pengendalian';
-                break;
-            case 'e':
+                  break;
+              case 'd':
+                  $dokumen = DokumenPengendalianModel::where('kriteria_id', $kriteria_nama)->get();
+                  $label = 'Pengendalian';
+                  break;
+              case 'e':
                 $dokumen = DokumenPeningkatanModel::where('kriteria_id', $kriteria_nama)->get();
                 $label = 'Peningkatan';
                 break;
@@ -67,12 +67,12 @@ class DokumenController extends Controller
                 break;
             case 'c':
                 $dokumen = DokumenEvaluasiModel::where('kriteria_id', $kriteria_nama)->get();
-                break;
-            case 'd':
-                $dokumen = DokumenPengendalianiModel::where('kriteria_id', $kriteria_nama)->get();
-                break;
-            case 'e':
-                $dokumen = DokumenPeningkatanModel::where('kriteria_id', $kriteria_nama)->get();
+                  break;
+              case 'd':
+                  $dokumen = DokumenPengendalianModel::where('kriteria_id', $kriteria_nama)->get();
+                  break;
+              case 'e':
+                  $dokumen = DokumenPeningkatanModel::where('kriteria_id', $kriteria_nama)->get();
                 break;
             default:
                 abort(404, 'Jenis dokumen tidak ditemukan');
@@ -168,12 +168,12 @@ class DokumenController extends Controller
                         'file_pendukung' => $filePath,
                         'jenis_list' => $jenis_list,
                     ]);
-                    break;
-                case 'd':
-                    DokumenPengendalianiModel::create([
-                        'kriteria_id' => $kriteria->kriteria_id,
-                        'description' => $request->input('description'),
-                        'link' => $request->filled('link') ? $request->input('link') : null,
+                      break;
+                  case 'd':
+                      DokumenPengendalianModel::create([
+                          'kriteria_id' => $kriteria->kriteria_id,
+                          'description' => $request->input('description'),
+                          'link' => $request->filled('link') ? $request->input('link') : null,
                         'file_pendukung' => $filePath,
                         'jenis_list' => $jenis_list,
                     ]);
@@ -229,12 +229,12 @@ class DokumenController extends Controller
             case 'c':
                 $dokumen = DokumenEvaluasiModel::where('kriteria_id', $kriteria->kriteria_id)->get();
                 $label = 'Evaluasi';
-                break;
-            case 'd':
-                $dokumen = DokumenPengendalianiModel::where('kriteria_id', $kriteria->kriteria_id)->get();
-                $label = 'Pengendalian';
-                break;
-            case 'e':
+                  break;
+              case 'd':
+                  $dokumen = DokumenPengendalianModel::where('kriteria_id', $kriteria->kriteria_id)->get();
+                  $label = 'Pengendalian';
+                  break;
+              case 'e':
                 $dokumen = DokumenPeningkatanModel::where('kriteria_id', $kriteria->kriteria_id)->get();
                 $label = 'Peningkatan';
                 break;
@@ -268,12 +268,12 @@ class DokumenController extends Controller
                     break;
                 case 'c':
                     $dokumen = DokumenEvaluasiModel::find($id);
-                    break;
-                case 'd':
-                    $dokumen = DokumenPengendalianiModel::find($id);
-                    break;
-                case 'e':
-                    $dokumen = DokumenPeningkatanModel::find($id);
+                      break;
+                  case 'd':
+                      $dokumen = DokumenPengendalianModel::find($id);
+                      break;
+                  case 'e':
+                      $dokumen = DokumenPeningkatanModel::find($id);
                     break;
                 default:
                     return response()->json([
@@ -329,12 +329,12 @@ class DokumenController extends Controller
             case 'c':
                 $dokumen = DokumenEvaluasiModel::findOrFail($id);
                 $label = 'Evaluasi';
-                break;
-            case 'd':
-                $dokumen = DokumenPengendalianiModel::findOrFail($id);
-                $label = 'Pengendalian';
-                break;
-            case 'e':
+                  break;
+              case 'd':
+                  $dokumen = DokumenPengendalianModel::findOrFail($id);
+                  $label = 'Pengendalian';
+                  break;
+              case 'e':
                 $dokumen = DokumenPeningkatanModel::findOrFail($id);
                 $label = 'Peningkatan';
                 break;
@@ -347,7 +347,8 @@ class DokumenController extends Controller
 
     public function update(Request $request, $kriteria_nama, $jenis_list, $id)
     {
-        $kriteria_nama = KriteriaModel::where('kriteria_nama', $kriteria_nama)->firstOrFail();
+      $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->firstOrFail();
+
 
         switch (strtolower($jenis_list)) {
             case 'a':
@@ -358,12 +359,12 @@ class DokumenController extends Controller
                 break;
             case 'c':
                 $dokumen = DokumenEvaluasiModel::findOrFail($id);
-                break;
-            case 'd':
-                $dokumen = DokumenPengendalianiModel::findOrFail($id);
-                break;
-            case 'e':
-                $dokumen = DokumenPeningkatanModel::findOrFail($id);
+                  break;
+              case 'd':
+                  $dokumen = DokumenPengendalianModel::findOrFail($id);
+                  break;
+              case 'e':
+                  $dokumen = DokumenPeningkatanModel::findOrFail($id);
                 break;
             default:
                 return redirect()->back()->with('error', 'Jenis dokumen tidak valid.');
@@ -392,39 +393,54 @@ class DokumenController extends Controller
 
         return redirect()->route('dokumen.preview', [$kriteria_nama, $jenis_list])
             ->with('success', 'Dokumen berhasil diperbarui.');
-    }
+      }
 
-
-
-
-    public function generatePDF($kriteria_nama)
+ public function generatePdf($kriteria_id)
 {
-    $kriteria = KriteriaModel::where('kriteria_nama', $kriteria_nama)->first();
-    if (!$kriteria) {
-        abort(404, 'Kriteria tidak ditemukan');
-    }
+    $kriteria = KriteriaModel::findOrFail($kriteria_id);
 
-    // Ambil semua detailKriteria yang terkait dengan kriteria ini
-    $details = \App\Models\DetailKriteriaModel::where('kriteria_id', $kriteria->kriteria_id)->get();
+    $data = [
+        'kriteria' => $kriteria,
+        'dokumen_penetapan' => DokumenPenetapan::where('kriteria_id', $kriteria_id)->get(),
+        'dokumen_pelaksanaan' => DokumenPelaksanaanModel::where('kriteria_id', $kriteria_id)->get(),
+        'dokumen_evaluasi' => DokumenEvaluasiModel::where('kriteria_id', $kriteria_id)->get(),
+        'dokumen_pengendalian' => DokumenPengendalianModel::where('kriteria_id', $kriteria_id)->get(),
+        'dokumen_peningkatan' => DokumenPeningkatanModel::where('kriteria_id', $kriteria_id)->get(),
+    ];
 
-    $dokumen = collect();
-    foreach ($details as $detail) {
-        if ($detail->penetapan) $dokumen->push($detail->penetapan);
-        if ($detail->pelaksanaan) $dokumen->push($detail->pelaksanaan);
-        if ($detail->evaluasi) $dokumen->push($detail->evaluasi);
-        if ($detail->pengendalian) $dokumen->push($detail->pengendalian);
-        if ($detail->peningkatan) $dokumen->push($detail->peningkatan);
-    }
+    // 1. Generate PDF ringkasan (dari blade)
+    $mainPdf = Pdf::loadView('dokumen.pdf', $data)->output();
+    $mainPdfPath = storage_path('app/temp_main.pdf');
+    file_put_contents($mainPdfPath, $mainPdf);
 
-    // Set label untuk judul PDF
-    $label = 'Dokumen untuk Kriteria: ' . $kriteria->kriteria_nama;
+    // 2. Merge semua PDF
+    $merger = new PDFMerger();
+    $merger->addPDF($mainPdfPath, 'all');
 
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('dokumen.pdf_preview', [
-        'dokumen' => $dokumen,
-        'label' => $label,
-        'kriteria' => $kriteria
+    // 3. Loop tiap dokumen dan gabungkan PDF-nya jika ada
+    $all_dokumen = collect([
+        ...$data['dokumen_penetapan'],
+        ...$data['dokumen_pelaksanaan'],
+        ...$data['dokumen_evaluasi'],
+        ...$data['dokumen_pengendalian'],
+        ...$data['dokumen_peningkatan'],
     ]);
 
-    return $pdf->stream('dokumen-preview.pdf');
-} 
-}
+    foreach ($all_dokumen as $dok) {
+        if ($dok->file_pendukung) {
+            $path = storage_path('app/public/' . $dok->file_pendukung);
+            if (file_exists($path)) {
+                $merger->addPDF($path, 'all');
+            }
+        }
+    }
+
+    // 4. Simpan hasil final
+    $finalPath = storage_path('app/Dokumen_PPEPP_Kriteria_' . $kriteria->id . '.pdf');
+    $merger->merge('file', $finalPath);
+
+    // 5. Kirim ke user & hapus temp file
+    unlink($mainPdfPath); // hapus file ringkasan sementara
+
+    return response()->download($finalPath)->deleteFileAfterSend(true);
+}}

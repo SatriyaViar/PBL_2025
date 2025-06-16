@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DokumenPengendalianiModel extends Model
+class DokumenPengendalianModel extends Model
 {
     use HasFactory;
 
     protected $table = 't_pengendalian';
-    protected $primaryKey = 'pengendalia_id';
+    protected $primaryKey = 'pengendalian_id';
 
     protected $fillable = [
         'kriteria_id',
